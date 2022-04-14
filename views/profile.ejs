@@ -10,7 +10,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form method="POST"   action="/profileUpdate/<%= userProfile._id%>?_method=PUT" >
+                <form      method="POST"   action="/profileUpdate/<%= userProfile._id%>?_method=PUT" encType="multipart/form-data"  >
+
+                    <div class="mb-3">
+                        <label class="form-label required">Resim</label>
+                        <input    name="image" type="file"  class="form-control"     >
+                    </div>
 
                     <div class="mb-3">
                         <label class="form-label required">Name</label>

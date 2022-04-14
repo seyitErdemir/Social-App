@@ -4,6 +4,10 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const methodOverride = require("method-override")
+const fileUpload = require('express-fileupload');
+
+
+
 const pageRoute = require('./routes/pageRoute')
 const adminRoute = require('./routes/adminRoute')
 const courseRoute = require('./routes/courseRoute')
@@ -53,7 +57,7 @@ app.use((req, res ,next) => {
 app.use(methodOverride('_method' , {
     methods : ['GET', 'POST']
 }))
-
+app.use(fileUpload());
 
 
 //route

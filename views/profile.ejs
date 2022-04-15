@@ -10,11 +10,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form      method="POST"   action="/profileUpdate/<%= userProfile._id%>?_method=PUT" encType="multipart/form-data"  >
+                <form method="POST" action="/profileUpdate/<%= userProfile._id%>?_method=PUT" enctype="multipart/form-data">
 
                     <div class="mb-3">
                         <label class="form-label required">Resim</label>
-                        <input    name="image" type="file"  class="form-control"     >
+                        <input name="image" type="file" class="form-control">
                     </div>
 
                     <div class="mb-3">
@@ -23,23 +23,23 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label required">Title</label>
-                        <input  value="<%= userProfile.title%>" name="title" type="text" placeholder="Enter title" class="form-control" id="exampleInput">
+                        <input value="<%= userProfile.title%>" name="title" type="text" placeholder="Enter title" class="form-control" id="exampleInput">
                     </div>
 
- 
+
                     <div class="mb-3">
                         <label class="form-label required">About</label>
                         <textarea name="about" class="form-control"><%= userProfile.about%></textarea>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit"   class="btn btn-primary">Submit</button>
-        
-                        <button type="submit" data-bs-dismiss="modal"  class="btn btn-danger   ">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                        <button type="submit" data-bs-dismiss="modal" class="btn btn-danger   ">Cancel</button>
                     </div>
                 </form>
             </div>
-       
+
         </div>
     </div>
 </div>
@@ -47,31 +47,29 @@
 
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#myModal").modal('show');
     });
 </script>
 
-
-
-
-
-
-
-
 <div class="py-4">
+    
+
     <div class="container">
+        
         <div class="row">
+
+      
 
             <aside class="col col-xl-3 order-xl-1 col-lg-12 order-lg-1 col-12">
                 <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
                     <div class="py-4 px-3 border-bottom">
-                        <img src="img/p13.png" class="img-fluid mt-2 rounded-circle" alt="Responsive image">
+                        <img src="<%= userProfile.image %>" class="img-fluid mt-2 rounded-circle" alt="Responsive image">
                         <h5 class="font-weight-bold text-dark mb-1 mt-4"><%= userProfile.name%></h5>
                         <p class="mb-0 text-muted"><%= userProfile.title%></p>
                     </div>
                     <div class="d-flex">
-                    
+
                         <div class="col-6 p-3">
                             <h6 class="font-weight-bold text-dark mb-1"><%= totalFollowers%></h6>
                             <p class="mb-0 text-black-50 small">Followers</p>
@@ -84,39 +82,41 @@
 
                     </div>
                     <% if (!active){ %>
-                    
-                          
-                            <% if (  !(user.following.includes(userProfile._id))) { %>
-                                <div class="overflow-hidden border-top text-center ">
-                                     
-                                        <form class="font-weight-bold p-3 d-block" method="POST" action="/profilefollow">
-                                            <input type="hidden" name="user_id" value="<%= userProfile._id%>">
-                                            <button class="btn btn-primary btn-sm"><span>Follow</span></button>
-                                        </form>
-                                    
-                                 </div>
 
-                                <%   }else{ %> 
 
-                                    <div class="overflow-hidden border-top text-center">
-                                        <form class="font-weight-bold p-3 d-block"  method="POST" action="/profileunfollow">
-                                            <input type="hidden" name="user_id" value="<%= userProfile._id%>">
-                                            <button class=" btn btn-danger btn-sm  "><span>Unfollow</span></button>
-                                        </form>
-                                       
-                                    
-                                    </div>
-                                    
-                            
-                                    <%   }   %> 
+                        <% if (  !(user.following.includes(userProfile._id))) { %>
+                            <div class="overflow-hidden border-top text-center ">
 
- 
- 
-                        
+                                <form class="font-weight-bold p-3 d-block" method="POST" action="/profilefollow">
+                                    <input type="hidden" name="user_id" value="<%= userProfile._id%>">
+                                    <button class="btn btn-primary btn-sm">
+                                        <span>Follow</span>
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        <%   }else{ %>
+
+                            <div class="overflow-hidden border-top text-center">
+                                <form class="font-weight-bold p-3 d-block" method="POST" action="/profileunfollow">
+                                    <input type="hidden" name="user_id" value="<%= userProfile._id%>">
+                                    <button class=" btn btn-danger btn-sm  ">
+                                        <span>Unfollow</span>
+                                    </button>
+                                </form>
+
+
+                            </div>
+
+
+                        <%   }   %>
+
+
                     <%   }%>
-                  
+
                     <% if (active){ %>
-                 
+
                         <div class="d-flex">
                             <div class="col-6 border-right p-3">
                                 <a class="font-weight-bold p-3 d-block" href="/users/logout">
@@ -125,14 +125,36 @@
                             </div>
                             <div class="col-6 p-3">
                                 <a type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal">Profil Düzenle</a>
+
+
                             </div>
-    
+
                         </div>
+
+
+                        <%  if(flashMessages )  {  %>
+
+                            <%  if(flashMessages.success )  {  %>
+    
+                                <div  style="position: fixed; top:20px; right:20px;" class="alert alert-success mt-3 ">
+                                    <%= flashMessages.success %>    
+                                </div>
+    
+    
+                            <%    } else if(flashMessages.error) {    %> 
+    
+                                <div class="alert alert-danger">
+                                    <%=  flashMessages.error %>    
+                                </div>
+    
+    
+                                <%   }   %>
+    
+    
+                        <%    }%>
                     <%   }%>
 
 
-
- 
                 </div>
                 <div class="box shadow-sm border rounded bg-white mb-3">
                     <div class="box-title border-bottom p-3">
@@ -141,7 +163,7 @@
                     <div class="box-body">
                         <div class="d-flex align-items-center osahan-post-header p-3 border-bottom people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/l4.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                             </div>
                             <div class="font-weight-bold">
                                 <div class="text-truncate">Character Concept
@@ -155,7 +177,7 @@
                         </div>
                         <div class="d-flex align-items-center osahan-post-header p-3 border-bottom people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/l8.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                             </div>
                             <div class="font-weight-bold">
                                 <div class="text-truncate">Digital Painting
@@ -169,7 +191,7 @@
                         </div>
                         <div class="d-flex align-items-center osahan-post-header p-3 people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/l5.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                             </div>
                             <div class="font-weight-bold">
                                 <div class="text-truncate">Adobe Photoshop
@@ -184,7 +206,7 @@
                     </div>
                 </div>
                 <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center overflow-hidden">
-                    <img src="img/job1.png" class="img-fluid" alt="Responsive image">
+                    <img src="  " class="img-fluid" alt="Responsive image">
                     <div class="p-3 border-bottom">
                         <h6 class="font-weight-bold text-dark">Osahan Solutions</h6>
                         <p class="mb-0 text-muted">Looking for talent?</p>
@@ -202,8 +224,10 @@
                         <h6 class="m-0">About You</h6>
                     </div>
                     <div class="box-body p-3">
-                        <p> <%= userProfile.about%> </p>
-                        
+                        <p>
+                            <%= userProfile.about%>
+                        </p>
+
                     </div>
                 </div>
                 <div class="box shadow-sm border rounded bg-white mb-3">
@@ -218,7 +242,7 @@
                                 <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month)
                                 </div>
                             </div>
-                            <img class="img-fluid ml-auto mb-auto" src="img/l3.png" alt="">
+                            <img class="img-fluid ml-auto mb-auto" src="  " alt="">
                         </div>
                         <p class="mb-0">Find the most qualified people in the most unexpected places. Information for applicants to consider when applying for local positions.
                         </p>
@@ -231,7 +255,7 @@
                                 <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month)
                                 </div>
                             </div>
-                            <img class="img-fluid ml-auto mb-auto" src="img/l6.png" alt="">
+                            <img class="img-fluid ml-auto mb-auto" src="  " alt="">
                         </div>
                         <p class="mb-0">Find the most qualified people in the most unexpected places. Information for..
                         </p>
@@ -244,7 +268,7 @@
                                 <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month)
                                 </div>
                             </div>
-                            <img class="img-fluid ml-auto mb-auto" src="img/l2.png" alt="">
+                            <img class="img-fluid ml-auto mb-auto" src="  " alt="">
                         </div>
                         <p class="mb-0">Wualified people in the most unexpected places. Information for applicants to consider when applying for local positions. The largest community on the web to find and list jobs that aren't restricted by commutes or a specific location.
                         </p>
@@ -262,7 +286,7 @@
                                 <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month)
                                 </div>
                             </div>
-                            <img class="img-fluid ml-auto mb-auto" src="img/e1.png" alt="">
+                            <img class="img-fluid ml-auto mb-auto" src="  " alt="">
                         </div>
                         <p class="mb-0">Find the most qualified people in the most unexpected places. Information for applicants to consider when applying for local positions.</p>
                     </div>
@@ -274,7 +298,7 @@
                                 <div class="small text-gray-500">Oct 2020 - Present (4 year 7 month)
                                 </div>
                             </div>
-                            <img class="img-fluid ml-auto mb-auto" src="img/e2.png" alt="">
+                            <img class="img-fluid ml-auto mb-auto" src="  " alt="">
                         </div>
                         <p class="mb-0">Wualified people in the most unexpected places. Information for applicants to consider when applying for local positions.</p>
                     </div>
@@ -288,7 +312,7 @@
                     <div class="box-body p-3">
                         <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p4.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
                             <div class="font-weight-bold mr-2">
@@ -302,7 +326,7 @@
                         </div>
                         <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p9.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
                             <div class="font-weight-bold mr-2">
@@ -316,7 +340,7 @@
                         </div>
                         <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p10.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
                             <div class="font-weight-bold mr-2">
@@ -330,7 +354,7 @@
                         </div>
                         <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p11.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
                             <div class="font-weight-bold mr-2">
@@ -344,7 +368,7 @@
                         </div>
                         <div class="d-flex align-items-center osahan-post-header people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="img/p12.png" alt="">
+                                <img class="rounded-circle" src="  " alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
                             <div class="font-weight-bold mr-2">
@@ -359,7 +383,7 @@
                     </div>
                 </div>
                 <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center overflow-hidden">
-                    <img src="img/ads1.png" class="img-fluid" alt="Responsive image">
+                    <img src="  " class="img-fluid" alt="Responsive image">
                     <div class="p-3 border-bottom">
                         <h6 class="font-weight-bold text-gold">Osahanin Premium</h6>
                         <p class="mb-0 text-muted">Grow &amp; nurture your network</p>
@@ -380,16 +404,16 @@
                                     <i class="feather-map-pin"></i>
                                     India, Punjab</div>
                             </div>
-                            <img class="img-fluid ml-auto" src="img/l3.png" alt="">
+                            <img class="img-fluid ml-auto" src="  " alt="">
                         </div>
                         <div class="d-flex align-items-center p-3 border-top border-bottom job-item-body">
                             <div class="overlap-rounded-circle">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p9.png" alt="" data-original-title="Sophia Lee">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p10.png" alt="" data-original-title="John Doe">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p11.png" alt="" data-original-title="Julia Cox">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p10.png" alt="" data-original-title="John Doe">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p11.png" alt="" data-original-title="Julia Cox">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p12.png" alt="" data-original-title="Robert Cook">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="  " alt="" data-original-title="Sophia Lee">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="  " alt="" data-original-title="John Doe">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="  " alt="" data-original-title="Julia Cox">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="  " alt="" data-original-title="John Doe">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="  " alt="" data-original-title="Julia Cox">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="  " alt="" data-original-title="Robert Cook">
                             </div>
                             <span class="font-weight-bold text-muted">18 connections</span>
                         </div>
@@ -411,14 +435,14 @@
                                     London, UK
                                 </div>
                             </div>
-                            <img class="img-fluid ml-auto" src="img/l4.png" alt="">
+                            <img class="img-fluid ml-auto" src="  " alt="">
                         </div>
                         <div class="d-flex align-items-center p-3 border-top border-bottom job-item-body">
                             <div class="overlap-rounded-circle">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="Sophia Lee">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p1.png" alt="" data-original-title="John Doe">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p2.png" alt="" data-original-title="Julia Cox">
-                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p3.png" alt="" data-original-title="Robert Cook">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="" alt="" data-original-title="Sophia Lee">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="" alt="" data-original-title="John Doe">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="" alt="" data-original-title="Julia Cox">
+                                <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="" alt="" data-original-title="Robert Cook">
                             </div>
                             <span class="font-weight-bold text-muted">18 connections</span>
                         </div>
@@ -433,10 +457,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
+ 
 
 <%- include('newpartials/_footer'); %>

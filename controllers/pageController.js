@@ -1,13 +1,20 @@
 const nodemailer = require("nodemailer");
 const fs = require("fs");
+const path = require("path");
 
 const Course = require("../models/Course")
 const User = require("../models/User")
+const Post = require("../models/Post")
+
 
 
 exports.getIndexPage = async (req, res) => {
-  // console.log(req.session.userID);
-  res.status(200).render('newindex', { page_name: 'index' })
+
+  const post = await Post.find().sort('-createdAt')
+  const user = await User.findById({ _id: req.session.userID })
+  const totalFollowing = user.following.length
+  const totalFollowers = user.followers.length
+  res.status(200).render('newindex', { page_name: 'index', user, totalFollowing, totalFollowers, post })
 }
 
 exports.getSearchPage = async (req, res) => {
@@ -63,31 +70,36 @@ exports.getUserProfilePage = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     //  console.log(req.files.image) 
-    const uploadDir = 'public/uploads'
+    const uploadDir = 'public/images/users'
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir)
     }
 
     let uploadImage = req.files.image
-    let uploadPath = __dirname + "/public/uploads/" + uploadImage.name
-    console.log(uploadPath);
+
+    const type = uploadImage.mimetype.slice(uploadImage.mimetype.search("/") + 1)
+    const imageName = Math.floor(Math.random() * 1000000000000000000)
+
+    // let uploadPath = __dirname + "/public/uploads/" + uploadImage.name
+    let uploadPath = path.resolve(__dirname, '..') + "/public/images/users/" + imageName + '.' + type
+
 
     const user = await User.findById({ _id: req.params.id })
     user.name = req.body.name
     user.title = req.body.title
     user.about = req.body.about
 
-    uploadImage.mv(uploadPath, async () =>  {
-
-      user.image = '/uploads/' + uploadImage.name
+    uploadImage.mv(uploadPath, async () => {
+      user.image = '/images/users/' + imageName + '.' + type
       user.save()
     })
 
-
+    req.flash('success', "has been created successfully")
     res.status(200).redirect('back')
- 
+
 
   } catch (error) {
+    req.flash('danger', ` hatalı `)
     res.status(400).json({
       status: 'fail',
       error

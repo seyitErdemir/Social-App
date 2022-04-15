@@ -10,6 +10,10 @@ const fileUpload = require('express-fileupload');
 
 const pageRoute = require('./routes/pageRoute')
 const adminRoute = require('./routes/adminRoute')
+const postRoute = require('./routes/postRoute')
+
+
+
 const courseRoute = require('./routes/courseRoute')
 const categoryRoute = require('./routes/categoryRoute')
 const userRoute = require('./routes/userRoute')
@@ -38,7 +42,7 @@ global.userIN = null
 
 //Middlewares
 // app.use(express.static('public/old'))
-app.use(express.static('public/new'))
+app.use(express.static('public'))
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(
@@ -54,6 +58,7 @@ app.use((req, res ,next) => {
     res.locals.flashMessages = req.flash()
     next()
 })
+
 app.use(methodOverride('_method' , {
     methods : ['GET', 'POST']
 }))
@@ -67,7 +72,7 @@ app.use('*', (req, res, next) => {
 })
 app.use('/', pageRoute)
 app.use('/admin', adminRoute)
-
+app.use('/post', postRoute)
 
 
 

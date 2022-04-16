@@ -99,11 +99,14 @@ exports.updateUser = async (req, res) => {
 
 
   } catch (error) {
-    req.flash('danger', ` hatalı `)
-    res.status(400).json({
-      status: 'fail',
-      error
-    })
+
+    req.flash('error', "has been created successfully")
+    res.status(200).redirect('back')
+ 
+    // res.status(400).json({
+    //   status: 'fail',
+    //   error
+    // })
   }
 }
 

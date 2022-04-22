@@ -4,10 +4,12 @@ const User = require('../models/User')
 
 exports.createPost = async (req, res) => {
   try {
-
-    console.log("buradayım");
+     
+    console.log(req.session.userID);
+    
     const post = await Post.create({ 
-      description: req.body.description 
+      description: req.body.description ,
+      user : req.session.userID
      
     })
 
@@ -19,6 +21,90 @@ exports.createPost = async (req, res) => {
     res.status(400).redirect('/posts')
   }
 }
+
+exports.likePost = async (req, res) => {
+  try { 
+
+
+    //alttaki satırda giriş yapan kullnıcının following dizisine takip etmek istediği profilin idsini eklemekte
+    const post = await Post.findById(  req.body.post_id  ) 
+    await post.like.push({ _id: req.session.userID })
+
+      post.like.map((like) => {
+        if( !like == req.session.userID ){
+          console.log(like);
+        }else{
+          console.log("<sadsd");
+        }
+        
+      }) 
+
+    console.log(post.like);
+     
+     
+
+    await post.save()
+    
+
+
+    res.status(200).redirect('back')
+  } catch (error) {
+    res.status(201).json({
+      status: 'fail',
+      error
+    })
+  }
+}
+
+exports.unlikePost = async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userID)
+    await user.following.pull({ _id: req.body.user_id })
+
+    const unfollowUser = await User.findById(req.body.user_id)
+    await unfollowUser.followers.pull({ _id: req.session.userID })
+
+    await user.save()
+    await unfollowUser.save()
+
+    res.status(200).redirect('back')
+  } catch (error) {
+    res.status(201).json({
+      status: 'fail',
+      error
+    })
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 exports.getAllPosts = async (req, res) => {
   try {

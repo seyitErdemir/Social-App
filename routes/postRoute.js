@@ -5,7 +5,15 @@ const authMiddleware = require('../middlewares/authMiddleware')
 const router = express.Router()
 
 
-router.route('/create').post( authMiddleware ,  postController.createPost) //   http://localhost:3000/post
+router.route('/create').post( authMiddleware ,  postController.createPost) //   http://localhost:3000/post/create
+
+router.route('/like').post(authMiddleware, postController.likePost)  //   http://localhost:3000/post/like
+router.route('/unlike').post( authMiddleware, postController.unlikePost)   //   http://localhost:3000/post/unlike
+
+
+
+
+
 router.route('/').get(postController.getAllPosts)
 router.route('/:slug').get(postController.getPost)
 router.route('/:slug').delete(postController.deletePost)

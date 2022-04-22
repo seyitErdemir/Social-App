@@ -10,11 +10,13 @@ const Post = require("../models/Post")
 
 exports.getIndexPage = async (req, res) => {
 
-  const post = await Post.find().sort('-createdAt')
+  const post = await Post.find().sort('-createdAt').populate('user')
   const user = await User.findById({ _id: req.session.userID })
+  const users = await User.find().sort('-createdAt').limit(5)
+
   const totalFollowing = user.following.length
   const totalFollowers = user.followers.length
-  res.status(200).render('newindex', { page_name: 'index', user, totalFollowing, totalFollowers, post })
+  res.status(200).render('newindex', { page_name: 'index', user, totalFollowing, totalFollowers, post , users  })
 }
 
 exports.getSearchPage = async (req, res) => {

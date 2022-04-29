@@ -13,9 +13,7 @@ const adminRoute = require('./routes/adminRoute')
 const postRoute = require('./routes/postRoute')
 
 
-
-const courseRoute = require('./routes/courseRoute')
-const categoryRoute = require('./routes/categoryRoute')
+ 
 const userRoute = require('./routes/userRoute')
 
 
@@ -75,9 +73,6 @@ app.use('/admin', adminRoute)
 app.use('/post', postRoute)
 
 
-
-app.use('/courses', courseRoute)
-app.use('/categories', categoryRoute)
 app.use('/users', userRoute)
 
 const port =   3000

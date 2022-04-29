@@ -15,14 +15,7 @@ router.route('/profileUpdate/:id').put( authMiddleware, pageController.updateUse
 router.route('/profilefollow').post(authMiddleware, pageController.followUser)
 router.route('/profileunfollow').post( authMiddleware, pageController.unfollowUser)
 
-
-
-router.route('/about').get(pageController.getAboutPage)
-
-
-router.route('/contact').get(pageController.getContactPage)
-router.route('/contact').post(pageController.sendEmail)
-
+ 
 
 router.route('/register').get(redirectMiddleware, pageController.getRegisterPage)
 router.route('/login').get(redirectMiddleware, pageController.getLoginPage)

@@ -11,12 +11,14 @@ const Post = require("../models/Post")
 exports.getIndexPage = async (req, res) => {
 
   const post = await Post.find().sort('-createdAt').populate('user')
+
+  // console.log("asdasdasdasd");
   const user = await User.findById({ _id: req.session.userID })
   const users = await User.find().sort('-createdAt').limit(5)
 
   const totalFollowing = user.following.length
   const totalFollowers = user.followers.length
-  res.status(200).render('newindex', { page_name: 'index', user, totalFollowing, totalFollowers, post , users  })
+  res.status(200).render('index', { page_name: 'index', user, totalFollowing, totalFollowers, post, users })
 }
 
 exports.getSearchPage = async (req, res) => {
@@ -45,7 +47,8 @@ exports.getSearchPage = async (req, res) => {
 exports.getUserProfilePage = async (req, res) => {
   try {
     var active = " "
-
+    const post = await Post.find({ user: req.session.userID }).sort('-createdAt').populate('user')
+    console.log(post)
     const user = await User.findById({ _id: req.session.userID })
     const userProfile = await User.findById({ _id: req.params.id })
     const totalFollowing = userProfile.following.length
@@ -60,7 +63,7 @@ exports.getUserProfilePage = async (req, res) => {
     //search  ve   profile detay kısımları yapıldı
 
 
-    res.status(200).render('profile', { page_name: 'index', userProfile, user, active, totalFollowing, totalFollowers })
+    res.status(200).render('profile', { page_name: 'index', userProfile, user, active, totalFollowing, totalFollowers, post })
   } catch (error) {
     res.status(201).json({
       status: 'fail',
@@ -104,7 +107,7 @@ exports.updateUser = async (req, res) => {
 
     req.flash('error', "has been created successfully")
     res.status(200).redirect('back')
- 
+
     // res.status(400).json({
     //   status: 'fail',
     //   error
@@ -164,17 +167,14 @@ exports.unfollowUser = async (req, res) => {
 
 
 
-
-exports.getAboutPage = (req, res) => {
-  res.status(200).render('about', { page_name: 'about' })
-}
+ 
 
 exports.getRegisterPage = (req, res) => {
-  res.status(200).render('newregister', { page_name: 'register' })
+  res.status(200).render('register', { page_name: 'register' })
 }
 
 exports.getLoginPage = (req, res) => {
-  res.status(200).render('newlogin', { page_name: 'login' })
+  res.status(200).render('login', { page_name: 'login' })
 }
 
 exports.getContactPage = (req, res) => {
@@ -184,9 +184,6 @@ exports.getContactPage = (req, res) => {
 exports.sendEmail = async (req, res) => {
 
   try {
-
-
-
     const outputMessage = ` 
         <h1>Message Details</h1>
         <ul>

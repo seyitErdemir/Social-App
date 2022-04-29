@@ -5,8 +5,7 @@ const Schema = mongoose.Schema
 const PostSchema = new Schema({
 
     description: {
-        type: String,
-        required: true,
+        type: String ,
         trim: true
     },
     image: {

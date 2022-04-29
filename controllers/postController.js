@@ -1,51 +1,85 @@
+const fs = require("fs");
+const path = require("path");
+
+
 const Post = require('../models/Post')
 const Category = require('../models/Category')
 const User = require('../models/User')
 
 exports.createPost = async (req, res) => {
   try {
-     
-    console.log(req.session.userID);
-    
-    const post = await Post.create({ 
-      description: req.body.description ,
-      user : req.session.userID
-     
-    })
+
+    const uploadDir = 'public/images/posts'
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir)
+    }
 
     
-    req.flash('success',` ${req.body.name} has been created successfully`)
+    
+
+
+    if (req.files) {
+      let uploadImage = req.files.image
+      const type = uploadImage.mimetype.slice(uploadImage.mimetype.search("/") + 1)
+      const imageName = Math.floor(Math.random() * 1000000000000000000)
+      let uploadPath = path.resolve(__dirname, '..') + "/public/images/posts/" + imageName + '.' + type
+      uploadImage.mv(uploadPath, async () => {
+        
+        if(req.body.description){
+        
+          const post = await Post.create({
+            description: req.body.description,
+            user: req.session.userID,
+            image: '/images/posts/' + imageName + '.' + type
+          })
+        }else{
+          console.log("yazi yok");
+          const post = await Post.create({ 
+            user: req.session.userID,
+            image: '/images/posts/' + imageName + '.' + type
+          })
+        }
+      })
+    } else if(req.body.description){ 
+      const post = await Post.create({
+        description: req.body.description,
+        user: req.session.userID
+      })
+    }else{
+      req.flash('error', "Something Happened")
+      res.status(400).redirect('/')
+    }
+
+
+
+
+    req.flash('success', ` ${req.body.name} has been created successfully`)
     res.status(201).redirect('/')
   } catch (error) {
-    req.flash('error',"Something Happened")
+    req.flash('error', "Something Happened")
     res.status(400).redirect('/posts')
   }
 }
 
 exports.likePost = async (req, res) => {
-  try { 
+  try {
 
 
     //alttaki satırda giriş yapan kullnıcının following dizisine takip etmek istediği profilin idsini eklemekte
-    const post = await Post.findById(  req.body.post_id  ) 
+    const post = await Post.findById(req.body.post_id)
     await post.like.push({ _id: req.session.userID })
 
-      post.like.map((like) => {
-        if( !like == req.session.userID ){
-          console.log(like);
-        }else{
-          console.log("<sadsd");
-        }
-        
-      }) 
+    post.like.map((like) => {
+      if (!like == req.session.userID) {
+        console.log(like);
+      } else {
+        console.log("<sadsd");
+      }
+
+    })
 
     console.log(post.like);
-     
-     
-
     await post.save()
-    
-
 
     res.status(200).redirect('back')
   } catch (error) {
@@ -114,20 +148,20 @@ exports.getAllPosts = async (req, res) => {
 
     let filter = {};
 
-    if(categorySlug) {
-      filter = {category:category._id}
+    if (categorySlug) {
+      filter = { category: category._id }
     }
 
-    if(query) {
-      filter = {name:query}
+    if (query) {
+      filter = { name: query }
     }
 
-    if(!query && !categorySlug) {
+    if (!query && !categorySlug) {
       filter.name = "",
-      filter.category = null
+        filter.category = null
     }
 
-     
+
 
     const posts = await Post.find({
       $or: [
@@ -136,10 +170,10 @@ exports.getAllPosts = async (req, res) => {
       ]
     }).sort('-createdAt').populate('user')
 
- 
+
     const categories = await Category.find()
- 
-    
+
+
 
     res.status(200).render('posts', {
       posts,
@@ -209,8 +243,8 @@ exports.releasePost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-   const post=  await Post.findOneAndRemove({slug:req.params.slug})
-    req.flash('error',` ${post.name} has been removed successfully`)
+    const post = await Post.findOneAndRemove({ slug: req.params.slug })
+    req.flash('error', ` ${post.name} has been removed successfully`)
 
     res.status(200).redirect('/users/dashboard')
 
@@ -225,13 +259,13 @@ exports.deletePost = async (req, res) => {
 
 exports.updatePost = async (req, res) => {
   try {
-   const post=  await Post.findOne({slug:req.params.slug})
+    const post = await Post.findOne({ slug: req.params.slug })
     post.name = req.body.name
     post.description = req.body.description
     post.category = req.body.category
 
     post.save()
- 
+
     res.status(200).redirect('/users/dashboard')
 
   } catch (error) {

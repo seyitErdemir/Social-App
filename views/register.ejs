@@ -25,19 +25,19 @@
                         <div class="osahan-login py-4">
                             <div class="text-center mb-4">
                                 <a href="index.html"><img src="img/logo.svg" alt=""/></a>
-                                <h5 class="font-weight-bold mt-3">Join Osahanin</h5>
+                                <h5 class="font-weight-bold mt-3">Aramıza Katıl</h5>
                                 <p class="text-muted">
-                                    Make the most of your professional life
+                                    Daha fazla arkadaş edinerek sosyalliğinizi arttırmaya ne dersiniz?
                                 </p>
                             </div>
                             <form   action="users/singup" method="POST"  >
                                 <div class="form-row">
                                     <div class="col">
                                         <div class="form-group">
-                                            <label class="mb-1">First name , Last name</label>
+                                            <label class="mb-1">İsim Soyisim</label>
                                             <div class="position-relative icon-form-control">
                                                 <i class="feather-user position-absolute"></i>
-                                                <input name="name" type="text" class="form-control"/>
+                                                <input name="name" type="text" placeholder="(İsim Soyisim)" class="form-control"/>
                                             </div>
                                         </div>
                                     </div>
@@ -51,49 +51,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="mb-1">Password (6 or more characters)</label>
+                                    <label class="mb-1">Şifre (minumum 6 veya daha fazla karakter içermeli))</label>
                                     <div class="position-relative icon-form-control">
                                         <i class="feather-unlock position-absolute"></i>
-                                        <input name="password"  type="password" class="form-control"/>
+                                        <input name="password" placeholder="sifre"  type="password" class="form-control"/>
+                                        <input name="image"  type="hidden" value="/images/users/default.png"class="form-control"/>
+
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="mb-1">You agree to the Osahanin
-                                        <a href="#">User Agreement</a>,
-                                        <a href="#">Privacy Policy</a>, and
-                                        <a href="#">Cookie Policy</a>.</label>
-                                </div>
+                               
                                 <button class="btn btn-primary btn-block text-uppercase" type="submit">
-                                    Agree & Join
+                                    Kayıt Ol
                                 </button>
-                                <div class="text-center mt-3 border-bottom pb-3">
-                                    <p class="small text-muted">Or login with</p>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <button type="button" class="btn btn-sm btn-outline-instagram btn-block">
-                                                <i class="feather-instagram"></i>
-                                                Instagram
-                                            </button>
-                                        </div>
-                                        <div class="col-4">
-                                            <button type="button" class="btn btn-sm btn-outline-linkedin btn-block">
-                                                <i class="feather-linkedin"></i>
-                                                Linkedin
-                                            </button>
-                                        </div>
-                                        <div class="col-4">
-                                            <button type="button" class="btn btn-sm btn-outline-facebook btn-block">
-                                                <i class="feather-facebook"></i>
-                                                Facebook
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                          
                                 <div class="py-3 d-flex align-item-center">
-                                    <a href="forgot-password.html">Forgot password?</a>
+                                    <a href="forgot-password.html">Şifremi Unuttum</a>
                                     <span class="ml-auto">
-                                        Already on Osahanin?
-                                        <a class="font-weight-bold" href="sign-in.html">Sign in</a>
+                                        Zaten üyemisin ? 
+                                        <a class="font-weight-bold" href="sign-in.html">Giriş yap</a>
                                     </span>
                                 </div>
                             </form>

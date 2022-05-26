@@ -1,39 +1,46 @@
-const nodemailer = require("nodemailer");
-const fs = require("fs");
-const path = require("path");
+const nodemailer = require('nodemailer')
+const fs = require('fs')
+const path = require('path')
 
-const Course = require("../models/Course")
-const User = require("../models/User")
-const Post = require("../models/Post")
-
-
+const Course = require('../models/Course')
+const User = require('../models/User')
+const Post = require('../models/Post')
 
 exports.getIndexPage = async (req, res) => {
+  // const post = await Post.find({ user: req.session.userID })  .sort('-createdAt') .populate('user')
 
-  const post = await Post.find().sort('-createdAt').populate('user')
-
-  // console.log("asdasdasdasd");
   const user = await User.findById({ _id: req.session.userID })
-  const users = await User.find().sort('-createdAt').limit(5)
+  const post = await Post.find({ user: user.following })
+    .sort('-createdAt')
+    .populate('user')
+
+  const users = await User.find()
+    .sort('-createdAt')
+    .limit(5)
 
   const totalFollowing = user.following.length
   const totalFollowers = user.followers.length
-  res.status(200).render('index', { page_name: 'index', user, totalFollowing, totalFollowers, post, users })
+  res.status(200).render('index', {
+    page_name: 'index',
+    user,
+    totalFollowing,
+    totalFollowers,
+    post,
+    users
+  })
 }
 
 exports.getSearchPage = async (req, res) => {
   try {
     const query = req.body.search
-    let filter = {};
+    let filter = {}
     if (query) {
       filter = { name: query }
     } else {
-      filter.name = ""
+      filter.name = ''
     }
     const users = await User.find({
-      $or: [
-        { name: { $regex: '.*' + filter.name + '.*', $options: 'i' } }
-      ]
+      $or: [{ name: { $regex: '.*' + filter.name + '.*', $options: 'i' } }]
     }).sort('-createdAt')
     res.status(200).render('searchList', { page_name: 'index', users, query })
   } catch (error) {
@@ -46,8 +53,10 @@ exports.getSearchPage = async (req, res) => {
 
 exports.getUserProfilePage = async (req, res) => {
   try {
-    var active = " "
-    const post = await Post.find({ user: req.session.userID }).sort('-createdAt').populate('user')
+    var active = ' '
+    const post = await Post.find({ user: req.params.id })
+      .sort('-createdAt')
+      .populate('user')
     console.log(post)
     const user = await User.findById({ _id: req.session.userID })
     const userProfile = await User.findById({ _id: req.params.id })
@@ -62,8 +71,15 @@ exports.getUserProfilePage = async (req, res) => {
 
     //search  ve   profile detay kısımları yapıldı
 
-
-    res.status(200).render('profile', { page_name: 'index', userProfile, user, active, totalFollowing, totalFollowers, post })
+    res.status(200).render('profile', {
+      page_name: 'index',
+      userProfile,
+      user,
+      active,
+      totalFollowing,
+      totalFollowers,
+      post
+    })
   } catch (error) {
     res.status(201).json({
       status: 'fail',
@@ -74,20 +90,25 @@ exports.getUserProfilePage = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    //  console.log(req.files.image) 
+    //  console.log(req.files.image)
     const uploadDir = 'public/images/users'
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir)
     }
-
     let uploadImage = req.files.image
 
-    const type = uploadImage.mimetype.slice(uploadImage.mimetype.search("/") + 1)
+    const type = uploadImage.mimetype.slice(
+      uploadImage.mimetype.search('/') + 1
+    )
     const imageName = Math.floor(Math.random() * 1000000000000000000)
 
     // let uploadPath = __dirname + "/public/uploads/" + uploadImage.name
-    let uploadPath = path.resolve(__dirname, '..') + "/public/images/users/" + imageName + '.' + type
-
+    let uploadPath =
+      path.resolve(__dirname, '..') +
+      '/public/images/users/' +
+      imageName +
+      '.' +
+      type
 
     const user = await User.findById({ _id: req.params.id })
     user.name = req.body.name
@@ -99,13 +120,10 @@ exports.updateUser = async (req, res) => {
       user.save()
     })
 
-    req.flash('success', "has been created successfully")
+    req.flash('success', 'has been created successfully')
     res.status(200).redirect('back')
-
-
   } catch (error) {
-
-    req.flash('error', "has been created successfully")
+    req.flash('error', 'has been created successfully')
     res.status(200).redirect('back')
 
     // res.status(400).json({
@@ -117,8 +135,7 @@ exports.updateUser = async (req, res) => {
 
 exports.followUser = async (req, res) => {
   try {
-    //giriş yapan kullanıcı bir kullanıcıyı takip ettiği zaman  ? 
-
+    //giriş yapan kullanıcı bir kullanıcıyı takip ettiği zaman  ?
 
     //alttaki satırda giriş yapan kullnıcının following dizisine takip etmek istediği profilin idsini eklemekte
     const user = await User.findById(req.session.userID)
@@ -128,10 +145,8 @@ exports.followUser = async (req, res) => {
     const followUser = await User.findById(req.body.user_id)
     await followUser.followers.push({ _id: req.session.userID })
 
-
     await user.save()
     await followUser.save()
-
 
     res.status(200).redirect('back')
   } catch (error) {
@@ -162,13 +177,6 @@ exports.unfollowUser = async (req, res) => {
   }
 }
 
-
-
-
-
-
- 
-
 exports.getRegisterPage = (req, res) => {
   res.status(200).render('register', { page_name: 'register' })
 }
@@ -182,7 +190,6 @@ exports.getContactPage = (req, res) => {
 }
 
 exports.sendEmail = async (req, res) => {
-
   try {
     const outputMessage = ` 
         <h1>Message Details</h1>
@@ -194,38 +201,36 @@ exports.sendEmail = async (req, res) => {
         </ul>
     `
 
-
     let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: 'smtp.gmail.com',
       port: 465,
       secure: true, // true for 465, false for other ports
       auth: {
-        user: "seyiterdemir4242@gmail.com", // gmail account
-        pass: "qzylnxurwlullnci", // gmail password
-      },
-    });
+        user: 'seyiterdemir4242@gmail.com', // gmail account
+        pass: 'qzylnxurwlullnci' // gmail password
+      }
+    })
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: '"Smart Edu Contact Form" <seyiterdemir4242>', // sender address
-      to: "seyiterdemir4242@gmail.com,", // list of receivers
-      subject: "Smart Edu Contact Form New Message ", // Subject line 
-      html: outputMessage, // html body
-    });
+      to: 'seyiterdemir4242@gmail.com,', // list of receivers
+      subject: 'Smart Edu Contact Form New Message ', // Subject line
+      html: outputMessage // html body
+    })
 
-    console.log("Message sent: %s", info.messageId);
+    console.log('Message sent: %s', info.messageId)
     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
     // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 
     req.flash('success', 'We recoived your message successfully')
     res.status(200).redirect('/contact')
-
   } catch (error) {
     // req.flash('error',` Something Happened  ${error}` )
-    req.flash('error', "Something Happened")
+    req.flash('error', 'Something Happened')
     res.status(200).redirect('/contact')
   }
 }

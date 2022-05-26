@@ -5,15 +5,16 @@ const Category = require('../models/Category')
 const Course = require('../models/Course')
 
 exports.createUser = async(req, res) => {
-    try {
-        const user = await User.create(req.body)
+    try { 
+        const user = await User.create(req.body) 
+        await user.following.push({ _id: user._id }) 
+        user.save()
         res.status(201).redirect('/login')
+
     } catch (error) {
         const errors = validationResult(req);
-        
         console.log(errors);
         console.log(errors.array()[0].msg);
-
         for (let i = 0; i < errors.array().length; i++) {
             req.flash('error',` ${errors.array()[i].msg}  `)
         }
@@ -83,8 +84,6 @@ exports.getDashboardPage = async(req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
 
-
-        
      const user=  await User.findByIdAndRemove({_id:req.params.id}) 
     //  await Course.deleteMany({user:req.params.id}) 
      await Course.deleteMany({user:user._id}) 

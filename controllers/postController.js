@@ -8,16 +8,11 @@ const User = require('../models/User')
 
 exports.createPost = async (req, res) => {
   try {
-
     const uploadDir = 'public/images/posts'
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir)
     }
-
-    
-    
-
-
+ 
     if (req.files) {
       let uploadImage = req.files.image
       const type = uploadImage.mimetype.slice(uploadImage.mimetype.search("/") + 1)
@@ -29,12 +24,14 @@ exports.createPost = async (req, res) => {
         
           const post = await Post.create({
             description: req.body.description,
+            userId : req.session.userID,
             user: req.session.userID,
             image: '/images/posts/' + imageName + '.' + type
           })
         }else{
           console.log("yazi yok");
           const post = await Post.create({ 
+            userId : req.session.userID,
             user: req.session.userID,
             image: '/images/posts/' + imageName + '.' + type
           })
@@ -43,6 +40,7 @@ exports.createPost = async (req, res) => {
     } else if(req.body.description){ 
       const post = await Post.create({
         description: req.body.description,
+        userId : req.session.userID,
         user: req.session.userID
       })
     }else{

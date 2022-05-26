@@ -3,7 +3,9 @@ const slugify = require('slugify')
 const Schema = mongoose.Schema
 
 const PostSchema = new Schema({
-
+    userId: {
+        type: String 
+    },
     description: {
         type: String ,
         trim: true

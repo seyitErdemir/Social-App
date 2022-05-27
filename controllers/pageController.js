@@ -14,9 +14,22 @@ exports.getIndexPage = async (req, res) => {
     .sort('-createdAt')
     .populate('user')
 
+  for (let i = 0; i < post.length; i++) {
+    post[i].like.map(lk => {
+      if (lk == req.session.userID) {
+        post[i].userId = true
+      }
+    })
+  }
+
   const users = await User.find()
     .sort('-createdAt')
     .limit(5)
+  users.map((usr, i) => {
+    if (usr._id == req.session.userID) {
+      users.splice(i, i)
+    }
+  })
 
   const totalFollowing = user.following.length
   const totalFollowers = user.followers.length
@@ -57,7 +70,24 @@ exports.getUserProfilePage = async (req, res) => {
     const post = await Post.find({ user: req.params.id })
       .sort('-createdAt')
       .populate('user')
-    console.log(post)
+
+    for (let i = 0; i < post.length; i++) {
+      post[i].like.map(lk => {
+        if (lk == req.session.userID) {
+          post[i].userId = true
+        }
+      })
+    }
+
+    const users = await User.find()
+      .sort('-createdAt')
+      .limit(5)
+    users.map((usr, i) => {
+      if (usr._id == req.params.id) {
+        users.splice(i, i)
+      }
+    })
+
     const user = await User.findById({ _id: req.session.userID })
     const userProfile = await User.findById({ _id: req.params.id })
     const totalFollowing = userProfile.following.length
@@ -75,6 +105,7 @@ exports.getUserProfilePage = async (req, res) => {
       page_name: 'index',
       userProfile,
       user,
+      users,
       active,
       totalFollowing,
       totalFollowers,
@@ -90,35 +121,45 @@ exports.getUserProfilePage = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    //  console.log(req.files.image)
+    // console.log(req.files.image)
     const uploadDir = 'public/images/users'
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir)
     }
-    let uploadImage = req.files.image
 
-    const type = uploadImage.mimetype.slice(
-      uploadImage.mimetype.search('/') + 1
-    )
-    const imageName = Math.floor(Math.random() * 1000000000000000000)
+    var userImage = ''
+    if (!(!req.files || Object.keys(req.files).length === 0)) {
+      let uploadImage = req.files.image
+      const type = uploadImage.mimetype.slice(
+        uploadImage.mimetype.search('/') + 1
+      )
+      const imageName = Math.floor(Math.random() * 1000000000000000000)
 
-    // let uploadPath = __dirname + "/public/uploads/" + uploadImage.name
-    let uploadPath =
-      path.resolve(__dirname, '..') +
-      '/public/images/users/' +
-      imageName +
-      '.' +
-      type
+      // let uploadPath = __dirname + "/public/uploads/" + uploadImage.name
+      let uploadPath =
+        path.resolve(__dirname, '..') +
+        '/public/images/users/' +
+        imageName +
+        '.' +
+        type
+      uploadImage.mv(uploadPath)
+      userImage = '/images/users/' + imageName + '.' + type
+    } else {
+      userImage = req.body.old_img
+    }
+
+    console.log('image adresi :', userImage)
 
     const user = await User.findById({ _id: req.params.id })
     user.name = req.body.name
     user.title = req.body.title
     user.about = req.body.about
-
-    uploadImage.mv(uploadPath, async () => {
-      user.image = '/images/users/' + imageName + '.' + type
-      user.save()
-    })
+    user.skills = req.body.skills
+    user.companyName = req.body.companyName
+    user.position = req.body.position
+    user.oTime = req.body.oTime
+    user.image = userImage
+    user.save()
 
     req.flash('success', 'has been created successfully')
     res.status(200).redirect('back')

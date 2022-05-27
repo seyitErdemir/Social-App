@@ -2,7 +2,6 @@
 
 
     <!-- Uptade Model  -->
-
     <div class="modal" id="myModal">
         <div class="modal-dialog">
             <div class="modal-content" style="width:150%">
@@ -36,6 +35,34 @@
                                     <label class="form-label required">About</label>
                                     <textarea name="about" class="form-control"><%= userProfile.about%></textarea>
                                 </div>
+                                <input name="old_img" type="hidden" value="<%= userProfile.image %>"
+                                    class="form-control">
+
+
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label required">Yetenekler (Aralara " , " koyarak yazmanızı
+                                        öneririz.)</label>
+                                    <textarea placeholder="(HTML,CSS,JavaScript)" name="skills"
+                                        class="form-control"><%= userProfile.skills%></textarea>
+                                </div>
+                                <h3>İş Hayatınız</h3>
+                                <div class="mb-3">
+                                    <label class="form-label required">Firma İsmi</label>
+                                    <input value="<%= userProfile.companyName%>" name="companyName" type="text"
+                                        placeholder="Firma İsmi" class="form-control" id="exampleInput">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label required">Firmanızdaki Göreviniz</label>
+                                    <input value="<%= userProfile.position%>" name="position" type="text"
+                                        placeholder="Firmanızdaki Göreviniz" class="form-control" id="exampleInput">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label required">Çalışma Süreniz</label>
+                                    <input value="<%= userProfile.oTime%>" name="oTime" type="text"
+                                        placeholder="Çalışma Süreniz Ay Olarak" class="form-control" id="exampleInput">
+                                </div>
 
                             </div>
                         </div>
@@ -52,15 +79,16 @@
         </div>
     </div>
     <!-- Uptade Model  -->
+  
+    <script  
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" >
+     
+        $(document).ready(function () {
+            $("#myModal").modal('show');
+        });
+    </script>
 
-
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
-            $(document).ready(function () {
-                $("#myModal").modal('show');
-            });
-        </script>
 
     <div class="py-4">
 
@@ -88,14 +116,14 @@
                                 <h6 class="font-weight-bold text-dark mb-1">
                                     <%= totalFollowers%>
                                 </h6>
-                                <p class="mb-0 text-black-50 small">Followers</p>
+                                <p class="mb-0 text-black-50 small">Takipçiler</p>
                             </div>
 
                             <div class="col-6 border-right p-3">
                                 <h6 class="font-weight-bold text-dark mb-1">
                                     <%= totalFollowing%>
                                 </h6>
-                                <p class="mb-0 text-black-50 small">Following</p>
+                                <p class="mb-0 text-black-50 small">Takip Edilenler</p>
                             </div>
 
                         </div>
@@ -108,7 +136,7 @@
                                     <form class="font-weight-bold p-3 d-block" method="POST" action="/profilefollow">
                                         <input type="hidden" name="user_id" value="<%= userProfile._id%>">
                                         <button class="btn btn-primary btn-sm">
-                                            <span>Follow</span>
+                                            <span>Takip Et</span>
                                         </button>
                                     </form>
 
@@ -121,7 +149,7 @@
                                             action="/profileunfollow">
                                             <input type="hidden" name="user_id" value="<%= userProfile._id%>">
                                             <button class=" btn btn-danger btn-sm  ">
-                                                <span>Unfollow</span>
+                                                <span>Takipten Çık</span>
                                             </button>
                                         </form>
 
@@ -138,13 +166,16 @@
 
                                                 <div class="d-flex">
                                                     <div class="col-6 border-right p-3">
-                                                        <a class="font-weight-bold p-3 d-block" href="/users/logout">
-                                                            Log Out
+                                                        <a type="button"
+                                                            class=" btn btn-secondary font-weight-bold p-3 d-block"
+                                                            href="/users/logout">
+                                                            Çıkış Yap
                                                         </a>
                                                     </div>
                                                     <div class="col-6 p-3">
-                                                        <a type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                            data-bs-target="#myModal">Profil Düzenle</a>
+                                                        <a type="button" class="btn btn-light font-weight-bold  d-block"
+                                                            data-bs-toggle="modal" data-bs-target="#myModal">Profil
+                                                            Düzenle</a>
 
 
                                                     </div>
@@ -156,67 +187,42 @@
 
 
                     </div>
-                    <div class="box shadow-sm border rounded bg-white mb-3">
-                        <div class="box-title border-bottom p-3">
-                            <h6 class="m-0">Skills & Endorsements</h6>
-                        </div>
-                        <div class="box-body">
-                            <div class="d-flex align-items-center osahan-post-header p-3 border-bottom people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
-                                </div>
-                                <div class="font-weight-bold">
-                                    <div class="text-truncate">Character Concept
-                                        <span class="badge badge-dark ml-1">1</span>
-                                    </div>
-                                    <div class="small text-muted">
-                                        <span class="text-primary">You and 1 connection</span>
-                                        have given endorsements for this skill
-                                    </div>
-                                </div>
+
+                    <%if( userProfile.skills ){ %>
+                        <div class="box shadow-sm border rounded bg-white mb-3">
+                            <div class="box-title border-bottom p-3">
+                                <h6 class="m-0">Yetenekler && Beceriler</h6>
                             </div>
-                            <div class="d-flex align-items-center osahan-post-header p-3 border-bottom people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
+                            <div class="box-body">
+                                <div class="p-3    " style="font-size:20px;">
+                                    <% userProfile.skills.split(',').forEach( skill=> { %>
+
+                                        <span class="badge badge-pill badge-light mt-1  mr-1 p-2 ">
+                                            <%=skill %>
+                                        </span>
+
+                                        <% }) %>
+
+
                                 </div>
-                                <div class="font-weight-bold">
-                                    <div class="text-truncate">Digital Painting
-                                        <span class="badge badge-danger ml-1">6</span>
-                                    </div>
-                                    <div class="small text-muted">
-                                        <span class="text-primary">Ask</span>
-                                        has given an endorsement for this skill
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center osahan-post-header p-3 people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
-                                </div>
-                                <div class="font-weight-bold">
-                                    <div class="text-truncate">Adobe Photoshop
-                                        <span class="badge badge-info ml-1">3</span>
-                                    </div>
-                                    <div class="small text-muted">
-                                        <span class="text-primary">Julia Cox</span>
-                                        has given an endorsement for this skill
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
-                    </div>
-                    <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center overflow-hidden">
-                        <img src="  " class="img-fluid" alt="Responsive image">
-                        <div class="p-3 border-bottom">
-                            <h6 class="font-weight-bold text-dark">Osahan Solutions</h6>
-                            <p class="mb-0 text-muted">Looking for talent?</p>
-                        </div>
-                        <div class="p-3">
-                            <button type="button" class="btn btn-outline-primary pl-4 pr-4">
-                                POST A JOB
-                            </button>
-                        </div>
-                    </div>
+                        <% }%>
+
+
+                            <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center overflow-hidden">
+                                <img src="  " class="img-fluid" alt="Responsive image">
+                                <div class="p-3 border-bottom">
+                                    <h6 class="font-weight-bold text-dark">Osahan Solutions</h6>
+                                    <p class="mb-0 text-muted">Looking for talent?</p>
+                                </div>
+                                <div class="p-3">
+                                    <button type="button" class="btn btn-outline-primary pl-4 pr-4">
+                                        POST A JOB
+                                    </button>
+                                </div>
+                            </div>
                 </aside>
                 <main class="col col-xl-6 order-xl-2 col-lg-12 order-lg-2 col-md-12 col-sm-12 col-12">
                     <div class="box shadow-sm border rounded bg-white mb-3">
@@ -341,40 +347,68 @@
                                                 </p>
                             </div>
                             <div class="p-3 border-bottom osahan-post-footer">
-                                <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/like">
-                                    <input type="hidden" name="post_id" value="<%= post[i]._id %>">
+                                <% if( post[i].userId=="true" ){ %>
 
-                                    <button class="btn btn-white">
-                                        <a class="mr-3 text-secondary">
-                                            <i class="feather-heart text-danger"></i>
-                                            <%= post[i].like.length %>
-                                                like
-                                        </a>
-                                    </button>
+                                    <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/unlike">
+                                        <input type="hidden" name="post_id" value="<%= post[i]._id %>">
+                                        <button class="btn btn-white">
+                                            <a class="mr-3 text-secondary">
+                                                <i class="fa-regular fa-thumbs-down"></i>
+                                                <%= post[i].like.length %> unlike
+                                            </a>
+                                        </button>
+                                    </form>
 
-                                </form>
+                                    <% } else { %>
+
+
+                                        <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/like">
+                                            <input type="hidden" name="post_id" value="<%= post[i]._id %>">
+                                            <button class="btn btn-white">
+                                                <a class="mr-3 text-secondary">
+                                                    <i class="fa-regular fa-thumbs-up"></i>
+                                                    <%= post[i].like.length %> like
+                                                </a>
+                                            </button>
+                                        </form>
+
+                                        <% } %>
 
 
 
-                                <a href="#" class="mr-3 text-secondary">
-                                    <i class="feather-message-square"></i>
-                                    8</a>
-                                <a href="#" class="mr-3 text-secondary">
-                                    <i class="feather-share-2"></i>
-                                    2</a>
+
+                                            <a href="#" class="mr-3 text-secondary">
+                                                <i class="feather-message-square"></i>
+                                                8</a>
+                                            <a href="#" class="mr-3 text-secondary">
+                                                <i class="feather-share-2"></i>
+                                                2</a>
+
+
+                                            <a href="/post/<%=  post[i]._id %>?_method=DELETE"
+                                                onclick="return confirm('Are you Sure')"
+                                                class="btn btn-outline-light btn-sm mr-1 " style="float: right;">
+                                                <i class="fa-solid fa-trash-can-arrow-up"></i>
+                                                Sil
+                                            </a>
+
+                                            <a href=""  class="btn btn-outline-light btn-sm mr-1 " style="float: right;"  data-bs-toggle="myModala"
+                                            data-bs-target="myModala" >
+                                                <i class="fa-solid fa-square-pen"></i>
+                                                Güncelle
+                                            </a>
+                                           
                             </div>
-                            <div class="p-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm mr-1">Awesome!!</button>
-                                <button type="button" class="btn btn-light btn-sm mr-1">😍</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm mr-1">Whats it
-                                    about?</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm mr-1">Oooo Great
-                                    Wow</button>
-                            </div>
-                        </div>
 
+                        </div> 
+                  
 
-                        <% } %>
+                       
+                    
+                    
+                            <% } %>
+                              
+                        
 
                 </main>
                 <aside class="col col-xl-3 order-xl-3 col-lg-12 order-lg-3 col-12">
@@ -383,76 +417,30 @@
                             <h6 class="m-0">Who viewed your profile</h6>
                         </div>
                         <div class="box-body p-3">
-                            <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div class="font-weight-bold mr-2">
-                                    <div class="text-truncate">Sophia Lee</div>
-                                    <div class="small text-gray-500">@Harvard
+                            <% users.forEach( user=> {%>
+
+                                <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="<%= user.image %>" alt="">
                                     </div>
-                                </div>
-                                <span class="ml-auto">
-                                    <button type="button" class="btn btn-light btn-sm">Connent</button>
-                                </span>
-                            </div>
-                            <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div class="font-weight-bold mr-2">
-                                    <div class="text-truncate">John Doe</div>
-                                    <div class="small text-gray-500">Traveler
+                                    <div class="font-weight-bold mr-2">
+                                        <div class="text-truncate">
+                                            <%= user.name %>
+                                        </div>
+                                        <div class="small text-gray-500">
+                                            <%= user.title %>
+                                        </div>
                                     </div>
+                                    <span class="ml-auto">
+                                        <a href="/profile/<%= user._id %> " type="button" class="btn btn-light btn-sm">
+                                            <i class="fa-solid fa-square-up-right"></i>
+                                        </a>
+                                    </span>
                                 </div>
-                                <span class="ml-auto">
-                                    <button type="button" class="btn btn-light btn-sm">Connent</button>
-                                </span>
-                            </div>
-                            <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div class="font-weight-bold mr-2">
-                                    <div class="text-truncate">Julia Cox</div>
-                                    <div class="small text-gray-500">Art Designer
-                                    </div>
-                                </div>
-                                <span class="ml-auto">
-                                    <button type="button" class="btn btn-light btn-sm">Connent</button>
-                                </span>
-                            </div>
-                            <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div class="font-weight-bold mr-2">
-                                    <div class="text-truncate">Robert Cook</div>
-                                    <div class="small text-gray-500">@Photography
-                                    </div>
-                                </div>
-                                <span class="ml-auto">
-                                    <button type="button" class="btn btn-light btn-sm">Connent</button>
-                                </span>
-                            </div>
-                            <div class="d-flex align-items-center osahan-post-header people-list">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="  " alt="">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div class="font-weight-bold mr-2">
-                                    <div class="text-truncate">Richard Bell</div>
-                                    <div class="small text-gray-500">@Envato
-                                    </div>
-                                </div>
-                                <span class="ml-auto">
-                                    <button type="button" class="btn btn-light btn-sm">Connent</button>
-                                </span>
-                            </div>
+
+
+
+                                <% })%>
                         </div>
                     </div>
                     <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center overflow-hidden">
@@ -467,28 +455,34 @@
                             </button>
                         </div>
                     </div>
-                
-                    <a href="job-profile.html">
-                        <div class="shadow-sm border rounded bg-white job-item mb-3">
-                            <div class="d-flex align-items-center p-3 job-item-header">
-                                <div class="overflow-hidden mr-2">
-                                    <h6 class="font-weight-bold text-dark mb-0 text-truncate">.NET Developer</h6>
-                                    <div class="text-truncate text-primary">Invision</div>
-                                    <div class="small text-gray-500">
-                                        <i class="feather-map-pin"></i>
-                                        London, UK
+
+                    <% if( userProfile.companyName ) { %>
+                        <div>
+                            <div class="shadow-sm border rounded bg-white job-item mb-3">
+                                <div class="d-flex align-items-center p-3 job-item-header">
+                                    <div class="overflow-hidden mr-2">
+                                        <h6 class="font-weight-bold text-dark mb-2 text-truncate">
+                                            <%= userProfile.position%>
+                                        </h6>
+                                        <div class="text-truncate text-primary mb-2 ">
+                                            <%= userProfile.companyName%>
+                                        </div>
+                                        <div class="small text-gray-500">
+
+                                            <i class="feather-clock"></i>
+                                            <%= userProfile.oTime%>
+                                        </div>
                                     </div>
+                                    <i style=" font-size:90px;" class="    ml-auto fa-solid fa-briefcase"></i>
+                                    <!-- <img class="img-fluid ml-auto" src=" " alt="">-->
                                 </div>
-                                <img class="img-fluid ml-auto" src="  " alt="">
-                            </div>
-                       
-                            <div class="p-3 job-item-footer">
-                                <small class="text-gray-500">
-                                    <i class="feather-clock"></i>
-                                    Posted 3 Days ago</small>
+
+
                             </div>
                         </div>
-                    </a>
+
+                        <% }%>
+
                 </aside>
             </div>
         </div>

@@ -3,50 +3,58 @@ const bcrypt = require('bcrypt')
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    title: {
-        type: String 
-    },
-     about: {
-        type: String 
-    },
-    image: {
-        type: String 
-    },
+  name: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String
+  },
+  about: {
+    type: String
+  },
+  skills: {
+    type: String
+  },
+  image: {
+    type: String
+  },
+  companyName: {
+    type: String
+  },
+  position: {
+    type: String
+  },
+  oTime: {
+    type: String
+  },
 
-
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        enum: ['user', 'preuser', 'admin'],
-        default: 'user'
-    },
-    following: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }],
-    followers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }],
-
-
-    courses: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Course"
-    }]
-
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    enum: ['user', 'preuser', 'admin'],
+    default: 'user'
+  },
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ]
 })
 
 // UserSchema.pre('save', function(next) {
@@ -58,20 +66,18 @@ const UserSchema = new Schema({
 // })
 
 UserSchema.pre('save', function (next) {
-    const user = this;
-    if (!user.isModified('password')) return next();
+  const user = this
+  if (!user.isModified('password')) return next()
 
-    bcrypt.genSalt(10, function (err, salt) {
-        if (err) return next(err);
-        bcrypt.hash(user.password, salt, function (err, hash) {
-            if (err) return next(err);
-            user.password = hash;
-            next();
-        });
-    });
-});
-
-
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) return next(err)
+    bcrypt.hash(user.password, salt, function (err, hash) {
+      if (err) return next(err)
+      user.password = hash
+      next()
+    })
+  })
+})
 
 const User = mongoose.model('User', UserSchema)
 

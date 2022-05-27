@@ -12,11 +12,11 @@ router.route('/unlike').post( authMiddleware, postController.unlikePost)   //   
 
 
 
-
+router.route('/:id').delete(postController.deletePost)
+router.route('/:id').put(postController.updatePost)
 
 router.route('/').get(postController.getAllPosts)
 router.route('/:slug').get(postController.getPost)
-router.route('/:slug').delete(postController.deletePost)
 router.route('/:slug').put(postController.updatePost)
 
 router.route('/enroll').post(postController.enrollPost)

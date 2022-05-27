@@ -132,37 +132,43 @@
                         </p>
                     </div>
                     <div class="p-3 border-bottom osahan-post-footer">
-                        <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/like">
-                            <input type="hidden" name="post_id" value="<%= post[i]._id %>">
 
-                          <button class="btn btn-white">
-                            <a  class="mr-3 text-secondary">
-                                <i class="feather-heart text-danger"></i>
-                                <%= post[i].like.length %> like
-                            </a>
-                          </button>  
-                             
-                        </form>
-                        <%    post[i].like.map( like => {
-                                if(  like ==  user._id   ){   %>
-                                    <form class="font-weight-bold p-3  d-inline  " method="POST" action="/post/like">
-                                        <input type="hidden" name="user_id" value=" ">
-                                        <a href="#" class="mr-3 text-secondary">
-                                            <i class="feather-heart text-danger"></i>
-                                            16 unlike
-                                        </a>
-                                    </form>    
-                          <%     }else{     %>
-                            <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/like">
+
+
+
+                        <%     if(  post[i].userId ==  "true"   ){   %>
+                     
+                            <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/unlike">
                                 <input type="hidden" name="post_id" value="<%= post[i]._id %>">
                               <button class="btn btn-white">
                                 <a  class="mr-3 text-secondary">
-                                    <i class="feather-heart text-danger"></i>
-                                    <%= post[i].like.length %> like
+                                    <i class="fa-regular fa-thumbs-down"></i>
+                                    <%= post[i].like.length %> unlike
                                 </a>
                               </button>  
                             </form>
-                          <%  }   }) %>
+
+                         <%    }  else {  %>
+
+
+                                <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/like">
+                                    <input type="hidden" name="post_id" value="<%= post[i]._id %>">
+                                  <button class="btn btn-white">
+                                    <a  class="mr-3 text-secondary">
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                        <%= post[i].like.length %> like
+                                    </a>
+                                  </button>  
+                                </form>
+
+                          <%   }    %>
+
+
+
+
+
+
+ 
  
                         <a href="#" class="mr-3 text-secondary">
                             <i class="feather-message-square"></i>
@@ -171,12 +177,12 @@
                             <i class="feather-share-2"></i>
                             2</a>
                     </div>
-                    <div class="p-3">
+                    <!-- <div class="p-3">
                         <button type="button" class="btn btn-outline-primary btn-sm mr-1">Awesome!!</button>
                         <button type="button" class="btn btn-light btn-sm mr-1">😍</button>
                         <button type="button" class="btn btn-outline-secondary btn-sm mr-1">Whats it about?</button>
                         <button type="button" class="btn btn-outline-secondary btn-sm mr-1">Oooo Great Wow</button>
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -234,19 +240,19 @@
                 <div class="box-body p-3">
                     <% users.forEach( user => {%>
 
+                     
                         <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="<%= user.image %>" alt="">
-                                <div class="status-indicator bg-success"></div>
+                                <img class="rounded-circle" src="<%= user.image %>" alt=""> 
                             </div>
                             <div class="font-weight-bold mr-2">
                                 <div class="text-truncate"><%= user.name %></div>
                                 <div class="small text-gray-500"><%= user.title %></div>
                             </div>
                             <span class="ml-auto">
-                                <button type="button" class="btn btn-light btn-sm">
-                                    <i class="feather-user-plus"></i>
-                                </button>
+                                <a href="/profile/<%= user._id %> " type="button" class="btn btn-light btn-sm">
+                                    <i class="fa-solid fa-square-up-right"></i>
+                                </a>
                             </span>
                         </div>
 
@@ -295,70 +301,28 @@
                     </button>
                 </div>
             </div>
-            <div class="box shadow-sm border rounded bg-white mb-3">
-                <div class="box-title border-bottom p-3">
-                    <h6 class="m-0">İşler
-                    </h6>
+            <% if( user.companyName ) { %>
+                <div  >
+                    <div class="shadow-sm border rounded bg-white job-item mb-3">
+                        <div class="d-flex align-items-center p-3 job-item-header">
+                            <div class="overflow-hidden mr-2">
+                                <h6 class="font-weight-bold text-dark mb-2 text-truncate"> <%= user.position%></h6>
+                                <div class="text-truncate text-primary mb-2 "> <%= user.companyName%></div>
+                                <div class="small text-gray-500">
+                                   
+                                        <i class="feather-clock"></i>
+                                        <%= user.oTime%> 
+                                </div>
+                            </div>
+                            <i style=" font-size:90px;" class="    ml-auto fa-solid fa-briefcase"></i>
+                            <!-- <img class="img-fluid ml-auto" src=" " alt="">-->
+                        </div> 
+                   
+                       
+                    </div>
                 </div>
-                <div class="box-body p-3">
-                    <a href="job-profile.html">
-                        <div class="shadow-sm border rounded bg-white job-item mb-3">
-                            <div class="d-flex align-items-center p-3 job-item-header">
-                                <div class="overflow-hidden mr-2">
-                                    <h6 class="font-weight-bold text-dark mb-0 text-truncate">Product Director</h6>
-                                    <div class="text-truncate text-primary">Spotify Inc.</div>
-                                    <div class="small text-gray-500">
-                                        <i class="feather-map-pin"></i>
-                                        India, Punjab</div>
-                                </div>
-                                <img class="img-fluid ml-auto" src="img/l3.png" alt="">
-                            </div>
-                            <div class="d-flex align-items-center p-3 border-top border-bottom job-item-body">
-                                <div class="overlap-rounded-circle">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="Ayşe DEMİR">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="Faruk KIRAN">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="İlayda ERDEN">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="Fatih ÇINAR">
-                                </div>
-                                <span class="font-weight-bold text-muted">18 Bağs</span>
-                            </div>
-                            <div class="p-3 job-item-footer">
-                                <small class="text-gray-500">
-                                    <i class="feather-clock"></i>
-                                    Posted 3 Days ago</small>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="job-profile.html">
-                        <div class="shadow-sm border rounded bg-white job-item">
-                            <div class="d-flex align-items-center p-3 job-item-header">
-                                <div class="overflow-hidden mr-2">
-                                    <h6 class="font-weight-bold text-dark mb-0 text-truncate">.NET Developer</h6>
-                                    <div class="text-truncate text-primary">Invision</div>
-                                    <div class="small text-gray-500">
-                                        <i class="feather-map-pin"></i>
-                                        London, UK
-                                    </div>
-                                </div>
-                                <img class="img-fluid ml-auto" src="img/l4.png" alt="">
-                            </div>
-                            <div class="d-flex align-items-center p-3 border-top border-bottom job-item-body">
-                                <div class="overlap-rounded-circle">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="Ayşe DEMİR">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="Faruk KIRAN">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top" title="" src="img/p13.png" alt="" data-original-title="Fatih ÇINAR">
-                                </div>
-                                <span class="font-weight-bold text-muted">18 Bağs</span>
-                            </div>
-                            <div class="p-3 job-item-footer">
-                                <small class="text-gray-500">
-                                    <i class="feather-clock"></i>
-                                    Posted 3 Days ago</small>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
+
+          <%   }%>
         </aside>
     </div>
 </div></div><%- include('partials/_footer'); %>

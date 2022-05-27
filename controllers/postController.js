@@ -47,10 +47,7 @@ exports.createPost = async (req, res) => {
       req.flash('error', "Something Happened")
       res.status(400).redirect('/')
     }
-
-
-
-
+ 
     req.flash('success', ` ${req.body.name} has been created successfully`)
     res.status(201).redirect('/')
   } catch (error) {
@@ -67,16 +64,14 @@ exports.likePost = async (req, res) => {
     const post = await Post.findById(req.body.post_id)
     await post.like.push({ _id: req.session.userID })
 
-    post.like.map((like) => {
-      if (!like == req.session.userID) {
-        console.log(like);
-      } else {
-        console.log("<sadsd");
+    for(let i = 0; i<post.like.length ; i++ ){
+      if(post.like[i] ==   req.session.userID ){
+        console.log("beğenen o ");
+      }else{
+        console.log("Beğenen o değil");
       }
-
-    })
-
-    console.log(post.like);
+     
+    }
     await post.save()
 
     res.status(200).redirect('back')
@@ -90,16 +85,41 @@ exports.likePost = async (req, res) => {
 
 exports.unlikePost = async (req, res) => {
   try {
-    const user = await User.findById(req.session.userID)
-    await user.following.pull({ _id: req.body.user_id })
+    
+    //alttaki satırda giriş yapan kullnıcının following dizisine takip etmek istediği profilin idsini eklemekte
+    const post = await Post.findById(req.body.post_id)
+    await post.like.pull({ _id: req.session.userID })
 
-    const unfollowUser = await User.findById(req.body.user_id)
-    await unfollowUser.followers.pull({ _id: req.session.userID })
+    for(let i = 0; i<post.like.length ; i++ ){
+      if(post.like[i] ==   req.session.userID ){
+        console.log("beğenen o ");
+      }else{
+        console.log("Beğenen o değil");
+      }
+     
+    }
+    await post.save()
 
-    await user.save()
-    await unfollowUser.save()
+    
 
     res.status(200).redirect('back')
+  } catch (error) {
+    res.status(201).json({
+      status: 'failss',
+      error
+    })
+  }
+}
+
+
+exports.deletePost = async (req, res) => {
+  try {
+    
+    const post = await Post.findOneAndRemove({ id: req.params.id })
+     
+    req.flash('success', 'has been created successfully')
+    res.status(200).redirect('back')
+
   } catch (error) {
     res.status(201).json({
       status: 'fail',
@@ -110,9 +130,24 @@ exports.unlikePost = async (req, res) => {
 
 
 
+exports.updatePost = async (req, res) => {
+  try {
+    const post = await Post.findOne({ slug: req.params.slug })
+    post.name = req.body.name
+    post.description = req.body.description
+    post.category = req.body.category
 
+    post.save()
 
+    res.status(200).redirect('/users/dashboard')
 
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error
+    })
+  }
+}
 
 
 
@@ -239,38 +274,7 @@ exports.releasePost = async (req, res) => {
   }
 }
 
-exports.deletePost = async (req, res) => {
-  try {
-    const post = await Post.findOneAndRemove({ slug: req.params.slug })
-    req.flash('error', ` ${post.name} has been removed successfully`)
-
-    res.status(200).redirect('/users/dashboard')
-
-  } catch (error) {
-    res.status(201).json({
-      status: 'fail',
-      error
-    })
-  }
-}
 
 
-exports.updatePost = async (req, res) => {
-  try {
-    const post = await Post.findOne({ slug: req.params.slug })
-    post.name = req.body.name
-    post.description = req.body.description
-    post.category = req.body.category
 
-    post.save()
-
-    res.status(200).redirect('/users/dashboard')
-
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      error
-    })
-  }
-}
 

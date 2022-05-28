@@ -121,7 +121,7 @@
 
                             <div class="col-6 border-right p-3">
                                 <h6 class="font-weight-bold text-dark mb-1">
-                                    <%= totalFollowing%>
+                                    <%= totalFollowing-1 %>
                                 </h6>
                                 <p class="mb-0 text-black-50 small">Takip Edilenler</p>
                             </div>
@@ -334,55 +334,33 @@
                             <div class="p-3 border-bottom osahan-post-body">
 
                                 <% if( post[i].description ){ %>
-                                    <p class="mb-0">
+                                    <p class="mb-2">
                                         <%= post[i].description %>
                                     </p>
                                     <% } %>
 
 
-                                        <% if( post[i].image ){ %>
-                                            <img src="<%= post[i].image %>" class="img-fluid" alt="Responsive image">
+                                   <% if( post[i].image ){ %>
+                                     <img src="<%= post[i].image %>" class="img-fluid" alt="Responsive image">
 
-                                            <% } %>
-                                                </p>
+                                 <% } %>
+                                      
                             </div>
                             <div class="p-3 border-bottom osahan-post-footer">
-                                <% if( post[i].userId=="true" ){ %>
-
-                                    <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/unlike">
-                                        <input type="hidden" name="post_id" value="<%= post[i]._id %>">
-                                        <button class="btn btn-white">
-                                            <a class="mr-3 text-secondary">
-                                                <i class="fa-regular fa-thumbs-down"></i>
-                                                <%= post[i].like.length %> unlike
-                                            </a>
-                                        </button>
-                                    </form>
-
-                                    <% } else { %>
-
-
-                                        <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/like">
-                                            <input type="hidden" name="post_id" value="<%= post[i]._id %>">
-                                            <button class="btn btn-white">
-                                                <a class="mr-3 text-secondary">
-                                                    <i class="fa-regular fa-thumbs-up"></i>
-                                                    <%= post[i].like.length %> like
-                                                </a>
-                                            </button>
-                                        </form>
-
-                                        <% } %>
+                             
+                                <%     if(  post[i].userId ==  "true"   ){   %>
+                                    <div class="font-weight-bold p-3 d-inline btn-white text-secondary " method="POST" action="/post/unlike">
+                                      <button  value="unlike" id="unlike_<%= post[i]._id %>"  class="unlike btn  mr-3   btn-white text-secondary " ><i  id="<%= post[i]._id %>"  class="fa-regular fa-thumbs-down"></i><%= post[i].like.length %> like</button>  
+                                    </div>
+                                 <%    }  else {  %>
+                                        <div class="font-weight-bold p-3 d-inline btn-white text-secondary " method="POST" action="/post/like">                                    
+                                          <button  value="like"  id="like_<%= post[i]._id %>"  class="like  btn    mr-3  btn-white text-secondary  "><i id="<%= post[i]._id %>" class="fa-regular fa-thumbs-up"></i><%= post[i].like.length %> like</button>  
+                                        </div>
+                                  <%   }    %>
 
 
 
-
-                                            <a href="#" class="mr-3 text-secondary">
-                                                <i class="feather-message-square"></i>
-                                                8</a>
-                                            <a href="#" class="mr-3 text-secondary">
-                                                <i class="feather-share-2"></i>
-                                                2</a>
+                                        <% if (active){ %>   
 
 
                                             <a href="/post/<%=  post[i]._id %>?_method=DELETE"
@@ -392,21 +370,140 @@
                                                 Sil
                                             </a>
 
-                                            <a href=""  class="btn btn-outline-light btn-sm mr-1 " style="float: right;"  data-bs-toggle="myModala"
-                                            data-bs-target="myModala" >
-                                                <i class="fa-solid fa-square-pen"></i>
-                                                Güncelle
+                                            <a type="button"  class="btn btn-outline-light btn-sm mr-1 " style="float: right;"  
+                                            data-bs-toggle="modal" data-bs-target="#myModal<%=  post[i]._id %>"> 
+                                                <i class="fa-solid fa-square-pen"></i>   Güncelle
                                             </a>
+                                            
+
+                                            <% } %>
                                            
                             </div>
 
                         </div> 
-                  
 
-                       
-                    
+
+
+                                      <!-- Uptade  Post Model  -->
+                                            <div class="modal" id="myModal<%=  post[i]._id %>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content"  >
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Post Düzenleme</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST" action="/post/<%= post[i]._id %>?_method=PUT"
+                                                                enctype="multipart/form-data">
+                                                                        <div class="mb-3">
+                                                                           <img width="70px" src="<%=  post[i].image %>" alt="">
+                                                                        </div>
+                                                                    
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label required">Resim (Değiştirmek istemiyorsanız boş bırakabilirsiniz.)</label>
+                                                                            <input name="image" type="file" class="form-control">
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label required">Açıklama</label>
+                                                                            <textarea name="description" class="form-control"><%=  post[i].description %></textarea>
+                                                                        </div>
+                                                                        <input name="old_img" type="hidden" value="<%=  post[i].image %>"
+                                                                            class="form-control">
+                                                                
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">Güncelle</button>
+
+                                                                    <button type="submit" data-bs-dismiss="modal" class="btn btn-danger   ">İptal</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Uptade Post  Model  -->
+                                        
+                                            <script  
+                                            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+                                            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" >
+                                            
+                                                $(document).ready(function () {
+                                                    $("#myModal").modal('show');
+                                                });
+                                            </script>
+                     
                     
                             <% } %>
+
+                            <script> 
+
+                                $(".like , .unlike").click(function() {
+                                    var id = this.id;
+                                    var split_id = id.split("_")
+                                    console.log(split_id); 
+                                    var text = split_id[0];
+                                    var postid = split_id[1]
+                                    var content =  $("#"+id).text().split(" ")
+                                    var type = 1 ;
+                                  
+                                    if(text=="like"){
+                                        type = 1 ;
+                                    }else{
+                                        type=0;
+                                    } 
+                 
+                                    console.log(text); 
+                
+                                    if(text=="unlike"){
+                                        
+                                        $.ajax({
+                                              url: "/post/unlike",
+                                              method: "POST",
+                                              contentType: "application/json",
+                                              data:JSON.stringify({postid:postid}),
+                                              success: function(msg) {
+                                                  if (msg) {
+                                                      console.log("gönderim başarılı"); 
+                                                           
+                                                  } else {
+                                                      alertify.error("İşlem Tamamlanamadı");
+                                                  }
+                                              }
+                                          });
+                
+                                          $("i#"+postid).remove();
+                                            $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-up'></i>`)
+                                            $("#"+id).text(   parseInt(content[0])-1  +"  " + "like") 
+                                            $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');
+                                            $("#"+id).attr('id', `like_${postid}` );  
+                                       
+                                    }else{
+                                        
+                                        $.ajax({
+                                              url: "/post/like",
+                                              method: "POST",
+                                              contentType: "application/json",
+                                              data:JSON.stringify({postid:postid}),
+                                              success: function(msg) {
+                                                  if (msg) {
+                                                      console.log("gönderim başarılı");
+                                                  } else {
+                                                      alertify.error("İşlem Tamamlanamadı");
+                                                  }
+                                              }
+                                          });
+                                          console.log(text); 
+                                            $("i#"+postid).remove();
+                                            $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-down'></i>`)
+                                            $("#"+id).text(   parseInt(content[0])+1  +"  " + "like") 
+                                            $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');  
+                                            $("#"+id).attr('id', `unlike_${postid}` );
+                                     
+                                    }        
+                              });
+                              </script>
+
                               
                         
 

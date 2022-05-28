@@ -111,8 +111,9 @@
                                 <img class="rounded-circle" src="<%= post[i].user.image %> " alt="">
                                 <div class="status-indicator bg-success"></div>
                             </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate"><%= post[i].user.name %> </div>
+                            <div class="font-weight-bold"> 
+                                 
+                                <div class="text-truncate"><a   href="/profile/<%=post[i].user._id %>" >  <%= post[i].user.name %>  </a> </div>
                                 <div class="small text-gray-500"><%= post[i].user.title %> </div>
                             </div>
                             <span class="ml-auto small"><%= (post[i].createdAt).toISOString().split('T')[0] %></span>
@@ -132,10 +133,7 @@
                         </p>
                     </div>
                     <div class="p-3 border-bottom osahan-post-footer">
-
-
-
-
+<!-- 
                         <%     if(  post[i].userId ==  "true"   ){   %>
                      
                             <form class="font-weight-bold p-3 d-inline " method="POST" action="/post/unlike">
@@ -161,33 +159,91 @@
                                   </button>  
                                 </form>
 
+                          <%   }    %> -->
+
+
+                          <%     if(  post[i].userId ==  "true"   ){   %>
+                            <div class="font-weight-bold p-3 d-inline btn-white text-secondary " method="POST" action="/post/unlike">
+                              <button  value="unlike" id="unlike_<%= post[i]._id %>"  class="unlike btn  mr-3   btn-white text-secondary " ><i  id="<%= post[i]._id %>"  class="fa-regular fa-thumbs-down"></i><%= post[i].like.length %> like</button>  
+                            </div>
+                         <%    }  else {  %>
+                                <div class="font-weight-bold p-3 d-inline btn-white text-secondary " method="POST" action="/post/like">                                    
+                                  <button  value="like"  id="like_<%= post[i]._id %>"  class="like  btn    mr-3  btn-white text-secondary  "><i id="<%= post[i]._id %>" class="fa-regular fa-thumbs-up"></i><%= post[i].like.length %> like</button>  
+                                </div>
                           <%   }    %>
-
-
-
-
-
-
- 
- 
-                        <a href="#" class="mr-3 text-secondary">
-                            <i class="feather-message-square"></i>
-                            8</a>
-                        <a href="#" class="mr-3 text-secondary">
-                            <i class="feather-share-2"></i>
-                            2</a>
                     </div>
-                    <!-- <div class="p-3">
-                        <button type="button" class="btn btn-outline-primary btn-sm mr-1">Awesome!!</button>
-                        <button type="button" class="btn btn-light btn-sm mr-1">😍</button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm mr-1">Whats it about?</button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm mr-1">Oooo Great Wow</button>
-                    </div> -->
+                   
                 </div>
 
 
             <%  }  %>
+            <script> 
 
+                $(".like , .unlike").click(function() {
+                    var id = this.id;
+                    var split_id = id.split("_")
+                    console.log(split_id); 
+                    var text = split_id[0];
+                    var postid = split_id[1]
+                    var content =  $("#"+id).text().split(" ")
+                    var type = 1 ;
+                  
+                    if(text=="like"){
+                        type = 1 ;
+                    }else{
+                        type=0;
+                    } 
+ 
+                    console.log(text); 
+
+                    if(text=="unlike"){
+                        
+                        $.ajax({
+                              url: "/post/unlike",
+                              method: "POST",
+                              contentType: "application/json",
+                              data:JSON.stringify({postid:postid}),
+                              success: function(msg) {
+                                  if (msg) {
+                                      console.log("gönderim başarılı"); 
+                                           
+                                  } else {
+                                      alertify.error("İşlem Tamamlanamadı");
+                                  }
+                              }
+                          });
+
+                          $("i#"+postid).remove();
+                            $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-up'></i>`)
+                            $("#"+id).text(   parseInt(content[0])-1  +"  " + "like") 
+                            $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');
+                            $("#"+id).attr('id', `like_${postid}` );  
+                       
+                    }else{
+                        
+                        $.ajax({
+                              url: "/post/like",
+                              method: "POST",
+                              contentType: "application/json",
+                              data:JSON.stringify({postid:postid}),
+                              success: function(msg) {
+                                  if (msg) {
+                                      console.log("gönderim başarılı");
+                                  } else {
+                                      alertify.error("İşlem Tamamlanamadı");
+                                  }
+                              }
+                          });
+                          console.log(text); 
+                            $("i#"+postid).remove();
+                            $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-down'></i>`)
+                            $("#"+id).text(   parseInt(content[0])+1  +"  " + "like") 
+                            $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');  
+                            $("#"+id).attr('id', `unlike_${postid}` );
+                     
+                    }        
+              });
+              </script>
 
         </main>
         <aside class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">

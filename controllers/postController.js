@@ -4,7 +4,8 @@ const path = require("path");
 
 const Post = require('../models/Post')
 const Category = require('../models/Category')
-const User = require('../models/User')
+const User = require('../models/User');
+const { exit } = require("process");
 
 exports.createPost = async (req, res) => {
   try {
@@ -59,9 +60,10 @@ exports.createPost = async (req, res) => {
 exports.likePost = async (req, res) => {
   try {
 
-
+    var postId = req.body.postid
+    console.log(postId);
     //alttaki satırda giriş yapan kullnıcının following dizisine takip etmek istediği profilin idsini eklemekte
-    const post = await Post.findById(req.body.post_id)
+    const post = await Post.findById(postId)
     await post.like.push({ _id: req.session.userID })
 
     for(let i = 0; i<post.like.length ; i++ ){
@@ -85,9 +87,10 @@ exports.likePost = async (req, res) => {
 
 exports.unlikePost = async (req, res) => {
   try {
-    
+    var postId = req.body.postid
+    console.log(postId);
     //alttaki satırda giriş yapan kullnıcının following dizisine takip etmek istediği profilin idsini eklemekte
-    const post = await Post.findById(req.body.post_id)
+    const post = await Post.findById(postId)
     await post.like.pull({ _id: req.session.userID })
 
     for(let i = 0; i<post.like.length ; i++ ){
@@ -113,10 +116,10 @@ exports.unlikePost = async (req, res) => {
 
 
 exports.deletePost = async (req, res) => {
-  try {
+  try {  
+      await Post.findByIdAndRemove({ _id: req.params.id })
     
-    const post = await Post.findOneAndRemove({ id: req.params.id })
-     
+    
     req.flash('success', 'has been created successfully')
     res.status(200).redirect('back')
 
@@ -132,14 +135,44 @@ exports.deletePost = async (req, res) => {
 
 exports.updatePost = async (req, res) => {
   try {
-    const post = await Post.findOne({ slug: req.params.slug })
-    post.name = req.body.name
-    post.description = req.body.description
-    post.category = req.body.category
+      console.log(req.params.id); 
 
-    post.save()
+        const uploadDir = 'public/images/posts'
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir)
+        }
 
-    res.status(200).redirect('/users/dashboard')
+        var postImage = ''
+        if (!(!req.files || Object.keys(req.files).length === 0)) {
+          let uploadImage = req.files.image
+          const type = uploadImage.mimetype.slice(
+            uploadImage.mimetype.search('/') + 1
+          )
+          const imageName = Math.floor(Math.random() * 1000000000000000000)
+          // let uploadPath = __dirname + "/public/uploads/" + uploadImage.name
+          let uploadPath =
+            path.resolve(__dirname, '..') +
+            '/public/images/posts/' +
+            imageName +
+            '.' +
+            type
+          uploadImage.mv(uploadPath)
+          postImage = '/images/posts/' + imageName + '.' + type
+        } else {
+          postImage = req.body.old_img
+        }
+
+        console.log('image adresi :', postImage)
+
+ 
+    const post = await Post.findById( req.params.id  )
+      post.description = req.body.description
+      post.image = postImage
+      post.save()
+
+
+    req.flash('success', 'has been created successfully')
+    res.status(200).redirect('back')
 
   } catch (error) {
     res.status(400).json({

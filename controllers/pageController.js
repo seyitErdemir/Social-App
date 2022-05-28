@@ -22,12 +22,12 @@ exports.getIndexPage = async (req, res) => {
     })
   }
 
-  const users = await User.find()
-    .sort('-createdAt')
-    .limit(5)
+  const users = await User.find().limit(7).sort('-createdAt')
+    
+    
   users.map((usr, i) => {
     if (usr._id == req.session.userID) {
-      users.splice(i, i)
+      users.splice(i)
     }
   })
 
@@ -81,10 +81,10 @@ exports.getUserProfilePage = async (req, res) => {
 
     const users = await User.find()
       .sort('-createdAt')
-      .limit(5)
+      .limit(7)
     users.map((usr, i) => {
       if (usr._id == req.params.id) {
-        users.splice(i, i)
+        users.splice(i )
       }
     })
 

@@ -17,7 +17,8 @@ const UserSchema = new Schema({
     type: String
   },
   image: {
-    type: String
+    type: String,
+    default:"/images/users/default.png"
   },
   companyName: {
     type: String

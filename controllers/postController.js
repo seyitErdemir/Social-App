@@ -9,6 +9,7 @@ const { exit } = require("process");
 
 exports.createPost = async (req, res) => {
   try {
+    console.log("buradayım");
     const uploadDir = 'public/images/posts'
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir)

@@ -164,11 +164,11 @@
 
                           <%     if(  post[i].userId ==  "true"   ){   %>
                             <div class="font-weight-bold p-3 d-inline btn-white text-secondary " method="POST" action="/post/unlike">
-                              <button  value="unlike" id="unlike_<%= post[i]._id %>"  class="unlike btn  mr-3   btn-white text-secondary " ><i  id="<%= post[i]._id %>"  class="fa-regular fa-thumbs-down"></i><%= post[i].like.length %> like</button>  
+                              <button  value="unlike" id="unlike_<%= post[i]._id %>"  class="unlike btn  mr-3   btn-white text-secondary " ><i  id="<%= post[i]._id %>"  class="fa-regular fa-thumbs-down"></i><%= post[i].like.length %> Beğeniden Vazgeç</button>  
                             </div>
                          <%    }  else {  %>
                                 <div class="font-weight-bold p-3 d-inline btn-white text-secondary " method="POST" action="/post/like">                                    
-                                  <button  value="like"  id="like_<%= post[i]._id %>"  class="like  btn    mr-3  btn-white text-secondary  "><i id="<%= post[i]._id %>" class="fa-regular fa-thumbs-up"></i><%= post[i].like.length %> like</button>  
+                                  <button  value="like"  id="like_<%= post[i]._id %>"  class="like  btn    mr-3  btn-white text-secondary  "><i id="<%= post[i]._id %>" class="fa-regular fa-thumbs-up"></i><%= post[i].like.length %> Beğen</button>  
                                 </div>
                           <%   }    %>
                     </div>
@@ -196,8 +196,7 @@
  
                     console.log(text); 
 
-                    if(text=="unlike"){
-                        
+                    if(text=="unlike"){                       
                         $.ajax({
                               url: "/post/unlike",
                               method: "POST",
@@ -205,21 +204,93 @@
                               data:JSON.stringify({postid:postid}),
                               success: function(msg) {
                                   if (msg) {
-                                      console.log("gönderim başarılı"); 
-                                           
-                                  } else {
-                                      alertify.error("İşlem Tamamlanamadı");
-                                  }
+                                      console.log("unlike gönderim işlemi başarılı"); 
+                                      $("i#"+postid).remove();
+                                        $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-up'></i>`)
+                                        $("#"+id).text(   parseInt(content[0])-1  +"  " + "Beğen") 
+                                        $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');
+                                        $("#"+id).attr('id', `like_${postid}` );   
+                                  } 
                               }
-                          });
+                          });                                               
+                    }else{                        
+                        $.ajax({
+                              url: "/post/like",
+                              method: "POST",
+                              contentType: "application/json",
+                              data:JSON.stringify({postid:postid}),
+                              success: function(msg) {
+                                  if (msg) {
+                                      console.log("like gönderim işlemi başarılı");
+                                      $("i#"+postid).remove();
+                                        $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-down'></i>`)
+                                        $("#"+id).text(   parseInt(content[0])+1  +"  " + "Beğeniden Vazgeç") 
+                                        $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');  
+                                        $("#"+id).attr('id', `unlike_${postid}` );
+                                  } 
+                              }
+                          });                                                                    
+                    }        
+              });
+              </script>
 
-                          $("i#"+postid).remove();
-                            $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-up'></i>`)
-                            $("#"+id).text(   parseInt(content[0])-1  +"  " + "like") 
-                            $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');
-                            $("#"+id).attr('id', `like_${postid}` );  
-                       
+        </main>
+        <aside class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
+            <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
+                <div class="py-4 px-3 border-bottom">
+                    <img src="<%= user.image %>" class="img-fluid mt-2 rounded-circle" alt="Responsive image">
+                    <h5 class="font-weight-bold text-dark mb-1 mt-4"><%= user.name %></h5>
+                    <p class="mb-0 text-muted"><%= user.title %></p>
+                </div>
+                <div class="d-flex">
+                    <div class="col-6 p-3">
+                        <h6 class="font-weight-bold text-dark mb-1"><%= totalFollowers%></h6>
+                        <p class="mb-0 text-black-50 small">Takipçiler</p>
+                    </div>
+                    <div class="col-6 border-right p-3">
+                        <h6 class="font-weight-bold text-dark mb-1"><%= totalFollowing-1 %></h6>
+                        <p class="mb-0 text-black-50 small">Takip Edilenler</p>
+                    </div>
+                </div>
+                <div class="overflow-hidden border-top">
+                    <a class="font-weight-bold p-3 d-block" href="/profile/<%= user._id %>">
+                        Profilimi Görüntüle
+                    </a>
+                </div>
+            </div>
+ 
+            <% if(user.role =="user"){ %>
+            <div class="box shadow-sm mb-3 rounded bg-white   text-center overflow-hidden">
+                <img src="img/p13.png" class="img-fluid" alt="Responsive image">
+                <div class="p-3 border-bottom">
+                    <h6 class="font-weight-bold text-gold">Premium</h6>
+                    <p class="mb-0 text-muted">Preminum olarak birçok avantajdan faydalan.</p>
+                </div>
+                <div class="p-3">
+                    <a type="button" href="users/preuser" class="btn btn-outline-gold pl-4 pr-4"> Aktif Et </a>
+                </div>
+            </div>
+            <% } %>
+            <script> 
+
+                $("").click(function() {
+                    var id = this.id;
+                    var split_id = id.split("_")
+                    console.log(split_id); 
+                    var text = split_id[0];
+                    var postid = split_id[1]
+                    var content =  $("#"+id).text().split(" ")
+                    var type = 1 ;
+                  
+                    if(text=="like"){
+                        type = 1 ;
                     }else{
+                        type=0;
+                    } 
+ 
+                    console.log(text); 
+
+                    
                         
                         $.ajax({
                               url: "/post/like",
@@ -234,59 +305,11 @@
                                   }
                               }
                           });
-                          console.log(text); 
-                            $("i#"+postid).remove();
-                            $("#"+id).before(`<i id='${postid}' class='fa-regular fa-thumbs-down'></i>`)
-                            $("#"+id).text(   parseInt(content[0])+1  +"  " + "like") 
-                            $("#"+id).attr('class', 'unlike btn   mr-3  btn-white text-secondary ');  
-                            $("#"+id).attr('id', `unlike_${postid}` );
-                     
-                    }        
+                                  
               });
               </script>
-
-        </main>
-        <aside class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
-            <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
-                <div class="py-4 px-3 border-bottom">
-                    <img src="<%= user.image %>" class="img-fluid mt-2 rounded-circle" alt="Responsive image">
-                    <h5 class="font-weight-bold text-dark mb-1 mt-4"><%= user.name %></h5>
-                    <p class="mb-0 text-muted"><%= user.title %></p>
-                </div>
-                <div class="d-flex">
-
-                    <div class="col-6 p-3">
-                        <h6 class="font-weight-bold text-dark mb-1"><%= totalFollowers%></h6>
-                        <p class="mb-0 text-black-50 small">Followers</p>
-                    </div>
-
-                    <div class="col-6 border-right p-3">
-                        <h6 class="font-weight-bold text-dark mb-1"><%= totalFollowing%></h6>
-                        <p class="mb-0 text-black-50 small">Following</p>
-                    </div>
-                </div>
-                <div class="overflow-hidden border-top">
-                    <a class="font-weight-bold p-3 d-block" href="/profile/<%= user._id %>">
-                        Profilimi Görüntüle
-                    </a>
-                </div>
-            </div>
-            <div class="box mb-3 shadow-sm rounded bg-white view-box overflow-hidden">
-
-                <div class="d-flex text-center"></div>
-            </div>
-            <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center">
-                <img src="img/p13.png" class="img-fluid" alt="Responsive image">
-                <div class="p-3 border-bottom">
-                    <h6 class="font-weight-bold text-dark">Osahan Solutions</h6>
-                    <p class="mb-0 text-muted">Looking for talent?</p>
-                </div>
-                <div class="p-3">
-                    <button type="button" class="btn btn-outline-primary pl-4 pr-4">
-                        POST A JOB
-                    </button>
-                </div>
-            </div>
+          
+           
         </aside>
         <aside class="col col-xl-3 order-xl-3 col-lg-6 order-lg-3 col-md-6 col-sm-6 col-12">
             <div class="box shadow-sm border rounded bg-white mb-3">
@@ -319,6 +342,11 @@
                  
                 </div>
             </div>
+
+        
+
+        
+
             <div class="box shadow-sm border rounded bg-white mb-3">
                 <div class="box-title border-bottom p-3 d-flex align-items-center">
                     <h6 class="m-0">Fotoğraflar</h6>
@@ -345,18 +373,10 @@
                     </div>
                 </div>
             </div>
-            <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center overflow-hidden">
-                <img src="img/p13.png" class="img-fluid" alt="Responsive image">
-                <div class="p-3 border-bottom">
-                    <h6 class="font-weight-bold text-gold">Osahanin Premium</h6>
-                    <p class="mb-0 text-muted">Grow & nurture your network</p>
-                </div>
-                <div class="p-3">
-                    <button type="button" class="btn btn-outline-gold pl-4 pr-4">
-                        ACTIVATE
-                    </button>
-                </div>
-            </div>
+
+            
+            
+         
             <% if( user.companyName ) { %>
                 <div  >
                     <div class="shadow-sm border rounded bg-white job-item mb-3">
@@ -377,8 +397,11 @@
                        
                     </div>
                 </div>
+           
 
           <%   }%>
+
+      
         </aside>
     </div>
 </div></div><%- include('partials/_footer'); %>

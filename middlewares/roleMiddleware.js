@@ -14,7 +14,7 @@ module.exports = (roles) => {
         if (roles.includes(userRole)) {
             next()
         } else {
-            return res.status(401).send("you cant do it")
+            return res.status(401).send("Böyle bir yetkin yok.")
         }
 
     }

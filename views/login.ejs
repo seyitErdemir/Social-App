@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         <meta name="description" content=""/>
         <meta name="author" content=""/>
         <link rel="icon" type="image/png" href="/img/fav.png"/>
-        <title>Osahanin - Job Portal & Social Network HTML Template</title>
+        <title>devSocial'a Hoşgeldin</title>
 
         <link rel="stylesheet" type="text/css" href="/vendor/slick/slick.min.css"/>
         <link rel="stylesheet" type="text/css" href="/vendor/slick/slick-theme.min.css"/>
@@ -24,10 +24,22 @@
                     <div class="col-md-4 mx-auto">
                         <div class="osahan-login py-4">
                             <div class="text-center mb-4">
-                                <a href="/index.html"><img src="/img/logo.svg" alt=""/></a>
-                                <h5 class="font-weight-bold mt-3">Merahaba Hoşgeldiniz</h5>
+                                <img  width="50px" src="/img/fav.png" alt=""/> 
+                                <h5 class="font-weight-bold mt-3">Merahaba devSocial'e Hoşgeldiniz</h5>
                                 <p class="text-muted">Oturum açmak için alttaki bilgileri doğru doldurduğunuzdan emin olunuz.</p>
                             </div>
+                            <%  if(flashMessages )  {  %>
+                                <%  if(flashMessages.success )  {  %>
+                                    <div class="alert alert-secondary">
+                                        <%= flashMessages.success %>    
+                                    </div>
+                                <%    } else if(flashMessages.error) {    %> 
+        
+                                    <div class="alert alert-secondary">
+                                        <%=  flashMessages.error %>    
+                                    </div>
+                                <%   }   %>
+                            <%    }%>
                             <form    method="POST" action="users/login"  >
                                 <div class="form-group">
                                     <label class="mb-1">Email Adresiniz</label>

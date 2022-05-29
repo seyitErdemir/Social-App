@@ -12,6 +12,28 @@
                 <div class="modal-body">
                     <form method="POST" action="/profileUpdate/<%= userProfile._id%>?_method=PUT"
                         enctype="multipart/form-data">
+                        <h5>Giriş Bilgileri </h5>
+                        <div class="row">
+                            
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label required">Email Adresin</label>
+                                        <input value="<%= userProfile.email%>" name="email" type="text"
+                                            placeholder="Email Adresiniz" class="form-control" id="exampleInput">
+                                    </div>
+                                 </div>
+                                <div class="col-6"> 
+                                    <div class="mb-3">
+                                        <label class="form-label required">Şifre (Değiştirmek istemiyorsan boş bırakabilirsin.)</label>
+                                        <input value="" name="password" type="password"
+                                            placeholder="Şifreniz" class="form-control" id="exampleInput">
+                                    </div>
+                                </div>
+                                                  
+                        </div>
+                        <br>
+                        <br>
+                        <h5>Genel Bilgiler</h5>
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-3">
@@ -174,7 +196,7 @@
                                                     </div>
                                                     <div class="col-6 p-3">
                                                         <a type="button" class="btn btn-light font-weight-bold  d-block"
-                                                            data-bs-toggle="modal" data-bs-target="#myModal">Profil
+                                                            data-bs-toggle="modal" data-bs-target="#myModal">Profile
                                                             Düzenle</a>
 
 

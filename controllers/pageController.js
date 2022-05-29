@@ -22,14 +22,14 @@ exports.getIndexPage = async (req, res) => {
     })
   }
 
-  const users = await User.find().limit(7).sort('-createdAt')
-    
-    
-  users.map((usr, i) => {
-    if (usr._id == req.session.userID) {
-      users.splice(i)
-    }
-  })
+  const users = await User.find().limit(6).sort('-createdAt')
+  unfollowUser = await User.findById(req.body.user_id)
+      
+    users.map((usr, i) => {
+      if (usr._id == req.session.userID) {
+        users.splice(i ,1)
+      }
+    })
 
   const totalFollowing = user.following.length
   const totalFollowers = user.followers.length
@@ -45,6 +45,8 @@ exports.getIndexPage = async (req, res) => {
 
 exports.getSearchPage = async (req, res) => {
   try {
+    const user = await User.findById({ _id: req.session.userID })
+
     const query = req.body.search
     let filter = {}
     if (query) {
@@ -55,7 +57,7 @@ exports.getSearchPage = async (req, res) => {
     const users = await User.find({
       $or: [{ name: { $regex: '.*' + filter.name + '.*', $options: 'i' } }]
     }).sort('-createdAt')
-    res.status(200).render('searchList', { page_name: 'index', users, query })
+    res.status(200).render('searchList', { page_name:"search",   users, query , user })
   } catch (error) {
     res.status(201).json({
       status: 'fail',
@@ -82,11 +84,11 @@ exports.getUserProfilePage = async (req, res) => {
     const users = await User.find()
       .sort('-createdAt')
       .limit(7)
-    users.map((usr, i) => {
-      if (usr._id == req.params.id) {
-        users.splice(i )
-      }
-    })
+      users.map((usr, i) => {
+        if (usr._id == req.session.userID) {
+          users.splice(i ,1)
+        }
+      })
 
     const user = await User.findById({ _id: req.session.userID })
     const userProfile = await User.findById({ _id: req.params.id })
@@ -102,7 +104,7 @@ exports.getUserProfilePage = async (req, res) => {
     //search  ve   profile detay kısımları yapıldı
 
     res.status(200).render('profile', {
-      page_name: 'index',
+      page_name: 'profile',
       userProfile,
       user,
       users,
@@ -148,9 +150,20 @@ exports.updateUser = async (req, res) => {
       userImage = req.body.old_img
     }
 
-    console.log('image adresi :', userImage)
+    
 
+    console.log('image adresi :', userImage)
+     
     const user = await User.findById({ _id: req.params.id })
+    
+    var password = ""
+    if(req.body.password){
+      password = req.body.password
+    }else{
+         password = user.password     
+    }
+    user.email = req.body.email
+    user.password = password
     user.name = req.body.name
     user.title = req.body.title
     user.about = req.body.about

@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User')
+const Post = require('../models/Post')
 const Category = require('../models/Category')
 const Course = require('../models/Course')
 
@@ -28,7 +29,6 @@ exports.loginUser = async(req, res) => {
     try {
         const { email, password } = req.body
         const user = await User.findOne({ email: email })
-
         if (user) {
             bcrypt.compare(password, user.password, (err, same) => {
                 if (same) {
@@ -37,13 +37,12 @@ exports.loginUser = async(req, res) => {
                     // res.status(200).redirect('/users/dashboard')
                     res.status(200).redirect('/')
                 }else{
-                        req.flash('error'," Your Password is not correct")
+                      req.flash('error',"Şifreniz doğru değil.")
                       res.status(400).redirect('/login')
-
                 }
             })
         }else{
-            req.flash('error',"User is not exist")
+            req.flash('error',"Kullanıcı mevcut değil.")
             res.status(400).redirect('/login')
         }
     } catch (error) {
@@ -59,6 +58,17 @@ exports.logoutUser = (req, res) => {
         res.redirect('/')
     })
 }
+
+exports.preUser = async(req, res) => {
+    const user = await User.findById({ _id: req.session.userID }) 
+    console.log("buradayım"); 
+    user.role = "preuser"
+    user.save()
+     
+
+    res.status(200).redirect('/')
+}
+
 
 exports.getDashboardPage = async(req, res) => {
     const user = await User.findOne({ _id: req.session.userID }).populate(
@@ -83,12 +93,33 @@ exports.getDashboardPage = async(req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try {
+        const user = await User.find()
+        const deleteduser = await User.findById({ _id: req.params.id })
+           
+        for (let i = 0; i < user.length; i++) {
+          
+            user[i].following.pull({ _id: req.params.id })
+            user[i].save()
+        }
+        
+      
+        for (let i = 0; i < deleteduser.followers.length; i++) {
+            const xx = await User.findById({ _id: deleteduser.followers[i]._id }) 
+            xx.followers.pull({ _id: req.params.id })
+            xx.save() 
+        } 
+      
+        
+        console.log("buradayım");
+    
 
-     const user=  await User.findByIdAndRemove({_id:req.params.id}) 
-    //  await Course.deleteMany({user:req.params.id}) 
-     await Course.deleteMany({user:user._id}) 
-     res.status(200).redirect('/users/dashboard')
-  
+        await Post.deleteMany({user:req.params.id}) 
+        await User.findByIdAndRemove({_id:req.params.id})    
+
+        req.session.destroy(() => {         
+            res.status(200).redirect('/')
+        })
+     
 
     } catch (error) {
       res.status(201).json({

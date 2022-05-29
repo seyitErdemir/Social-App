@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel="icon" type="image/png" href=" ">
+        <link rel="icon" type="image/png" href="/img/fav.png">
         <title>Social App</title>
 
         <link rel="stylesheet" type="text/css" href="/vendor/slick/slick.min.css">
@@ -55,7 +55,7 @@
 
         <nav class="navbar navbar-expand navbar-dark bg-dark osahan-nav-top p-0">
             <div class="container">
-                <a class="navbar-brand mr-2" href="/"><img src="https://askbootstrap.com/preview/osahanin/dark/img/logo.svg" alt="">
+                <a class="navbar-brand mr-2" href="/"><img src="/img/fav.png" alt="">
                 </a>
                 <form action="/search" method="POST" class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
@@ -67,15 +67,51 @@
                         </div>
                     </div>
                 </form>
+                <% if ( user.role == "preuser" ){%>   
+                     <h5><%= user.name %> Hoşgeldin</h5> 
+
+                <%   }%>
                 <ul class="navbar-nav ml-auto d-flex align-items-center">
 
-             
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profile/<%= user._id %>">
-                            <i class="fa-regular fa-address-card mr-2 "> </i>
-                            <span class="d-none d-lg-inline">Profili Görüntüle</span>
+                    <% if ( page_name == "profile" ){%>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <i class="fa-solid fa-house mr-2  "> </i>
+                                <span class="d-none d-lg-inline"> Anasayfaya Dön</span>
+                            </a>
+                        </li>
+
+                    <% } else {%>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/profile/<%= user._id %>">
+                                    <i class="fa-regular fa-address-card mr-2 "> </i>
+                                    <span class="d-none d-lg-inline">  Profili Görüntüle</span>
+                                </a>
+                            </li>
+
+                    <%   }%>
+                            
+                   <% if ( page_name == "search" ){%>
+                        <li class="nav-item">
+                             <a class="nav-link" href="/">
+                                 <i class="fa-solid fa-house mr-2 "> </i>
+                                 <span class="d-none d-lg-inline">  Anasayfaya Dön</span>
+                              </a>
+                         </li>
+                               
+                    <%   }%>
+
+                       
+                    
+                    <li class="nav-item"> 
+                        <a class="nav-link" href="/users/<%= user._id %>?_method=DELETE"   onclick=" return  confirm('Silme işlemini onaylayın'  )"     > 
+                            <i class="fa-solid fa-user-xmark mr-2 "></i>
+                            <span class="d-none d-lg-inline">Kaydını Sil</span>
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="/users/logout">
                             <i class="feather-log-out mr-2"></i>

@@ -71,9 +71,8 @@ app.use('*', (req, res, next) => {
 app.use('/', pageRoute)
 app.use('/admin', adminRoute)
 app.use('/post', postRoute)
-
-
 app.use('/users', userRoute)
+
 
 const port =   3000
 app.listen(port, () => {

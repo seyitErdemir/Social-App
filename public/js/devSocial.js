@@ -12,7 +12,7 @@ Version: 1.0
 $('[data-toggle="tooltip"]').tooltip();
 
 // Osahan Slider
-$('.osahan-slider').slick({
+$('.devSocial-slider').slick({
   centerMode: true,
   centerPadding: '30px',
   slidesToShow: 2,

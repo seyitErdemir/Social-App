@@ -6,17 +6,8 @@ const authMiddleware = require('../middlewares/authMiddleware')
 const router = express.Router()
 
 router.route('/').get( authMiddleware, pageController.getIndexPage)
-
 router.route('/search').post(authMiddleware, pageController.getSearchPage)
 router.route('/profile/:id').get( authMiddleware, pageController.getUserProfilePage)
-
-router.route('/profileUpdate/:id').put( authMiddleware, pageController.updateUser)
-
-router.route('/profilefollow').post(authMiddleware, pageController.followUser)
-router.route('/profileunfollow').post( authMiddleware, pageController.unfollowUser)
-
- 
-
 router.route('/register').get(redirectMiddleware, pageController.getRegisterPage)
 router.route('/login').get(redirectMiddleware, pageController.getLoginPage)
 

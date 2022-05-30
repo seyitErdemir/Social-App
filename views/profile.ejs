@@ -10,7 +10,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="/profileUpdate/<%= userProfile._id%>?_method=PUT"
+                    <form method="POST" action="/users/profileUpdate/<%= userProfile._id%>?_method=PUT"
                         enctype="multipart/form-data">
                         <h5>Giriş Bilgileri </h5>
                         <div class="row">
@@ -155,7 +155,7 @@
                             <% if ( !(user.following.includes(userProfile._id))) { %>
                                 <div class="overflow-hidden border-top text-center ">
 
-                                    <form class="font-weight-bold p-3 d-block" method="POST" action="/profilefollow">
+                                    <form class="font-weight-bold p-3 d-block" method="POST" action="/users/profilefollow">
                                         <input type="hidden" name="user_id" value="<%= userProfile._id%>">
                                         <button class="btn btn-primary btn-sm">
                                             <span>Takip Et</span>
@@ -168,7 +168,7 @@
 
                                     <div class="overflow-hidden border-top text-center">
                                         <form class="font-weight-bold p-3 d-block" method="POST"
-                                            action="/profileunfollow">
+                                            action="/users/profileunfollow">
                                             <input type="hidden" name="user_id" value="<%= userProfile._id%>">
                                             <button class=" btn btn-danger btn-sm  ">
                                                 <span>Takipten Çık</span>
@@ -335,8 +335,8 @@
                     <% for (var i=0; i < post.length; i++) { %>
 
 
-                        <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
-                            <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                        <div class="box shadow-sm border rounded bg-white mb-3 devSocial-post">
+                            <div class="p-3 d-flex align-items-center border-bottom devSocial-post-header">
                                 <div class="dropdown-list-image mr-3">
                                     <img class="rounded-circle" src="<%= post[i].user.image %> " alt="">
                                     <div class="status-indicator bg-success"></div>
@@ -353,7 +353,7 @@
                                     <%= (post[i].createdAt).toISOString().split('T')[0] %>
                                 </span>
                             </div>
-                            <div class="p-3 border-bottom osahan-post-body">
+                            <div class="p-3 border-bottom devSocial-post-body">
 
                                 <% if( post[i].description ){ %>
                                     <p class="mb-2">
@@ -368,7 +368,7 @@
                                  <% } %>
                                       
                             </div>
-                            <div class="p-3 border-bottom osahan-post-footer">
+                            <div class="p-3 border-bottom devSocial-post-footer">
                              
                                 <%     if(  post[i].userId ==  "true"   ){   %>
                                     <div class="font-weight-bold p-3 d-inline btn-white text-secondary " method="POST" action="/post/unlike">
@@ -538,7 +538,7 @@
                         <div class="box-body p-3">
                             <% users.forEach( user=> {%>
 
-                                <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                                <div class="d-flex align-items-center devSocial-post-header mb-3 people-list">
                                     <div class="dropdown-list-image mr-3">
                                         <img class="rounded-circle" src="<%= user.image %>" alt="">
                                     </div>

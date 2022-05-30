@@ -54,21 +54,21 @@ Version: 1.0
  .navbar-light .navbar-nav .nav-link, .navbar-light .navbar-nav .nav-link:hover {
      color: rgba(255,255,255,.8);
 }
- .osahan-nav-top .container {
+ .devSoc-nav-top .container {
      padding: 0 16px;
 }
- .osahan-nav-top .img-profile {
+ .devSocial-nav-top .img-profile {
      width: 30px;
      height: 30px;
 }
-.osahan-nav-top .navbar-brand img {
+.devSocial-nav-top .navbar-brand img {
     height: 31px;
     margin: -4px 0 0 0;
 }
- .osahan-nav-top .osahan-list-dropdown .nav-link i {
+ .devSocial-nav-top .devSocial-list-dropdown .nav-link i {
      font-size: 16px;
 }
- .osahan-nav-top .osahan-list-dropdown .nav-link .badge {
+ .devSocial-nav-top .devSocial-list-dropdown .nav-link .badge {
      position: absolute;
      border-radius: 50px;
      min-width: 15px;
@@ -79,16 +79,16 @@ Version: 1.0
      line-height: 15px;
      top: 11px;
 }
- .osahan-nav-top .nav-link {
+ .devSocial-nav-top .nav-link {
      position: relative;
      height: 55px;
      display: flex;
      align-items: center;
 }
- .osahan-nav-top .navbar-search .form-control {
+ .devSocial-nav-top .navbar-search .form-control {
      background: #121212;
 }
- .osahan-nav-top .navbar-search .btn {
+ .devSocial-nav-top .navbar-search .btn {
      background: #121212 !important;
      color: #74828e;
 }
@@ -133,17 +133,17 @@ Version: 1.0
 }
 /* End Card Design */
 /* Tab Design */
- .osahan-line-tab .nav-link {
+ .devSocial-line-tab .nav-link {
      font-size: 14px;
      font-weight: 500;
      padding: 1rem!important;
      color:#ffffff;
      position: relative;
 }
- .osahan-line-tab .nav-link.active {
+ .devSocial-line-tab .nav-link.active {
      color: #007bff;
 }
- .osahan-line-tab .nav-link.active:after {
+ .devSocial-line-tab .nav-link.active:after {
      content: "";
      background: -moz-linear-gradient(194deg, #00c9e4 0%, #007bff 100%);
     /* ff3.6+ */
@@ -167,7 +167,7 @@ Version: 1.0
 }
 /* End Tab */
 /* Login Page Designs */
- .osahan-login .form-control {
+ .devSocial-login .form-control {
     background: #121212;
     border-color: #121212;
 }
@@ -258,11 +258,11 @@ Version: 1.0
 }
 /* End FAQ */
 /* Chat */
-.osahan-chat-box {
+.devSocial-chat-box {
    height: 322px;
    overflow-y: scroll;
 }
-.osahan-chat-list {
+.devSocial-chat-list {
    overflow-y: auto;
    height: 463px;
    min-height: 463px;
@@ -421,7 +421,7 @@ ul.sidebar-card-list {
      margin-right: -8px;
      margin-left: -8px;
 }
- .osahan-share-post textarea {
+ .devSocial-share-post textarea {
      resize: none;
 }
  .text-success {
@@ -672,13 +672,13 @@ hr {
 /* Extra End */
 /* Mobile Media */
 @media (max-width: 768px) {
-	.osahan-nav-top .dropdown-menu {
+	.devSocial-nav-top .dropdown-menu {
 		width: 100% !important;
 	}
-	.osahan-nav-top .nav-item.dropdown {
+	.devSocial-nav-top .nav-item.dropdown {
 		position: unset;
 	}
-	.osahan-line-tab .nav-link {
+	.devSocial-line-tab .nav-link {
 		font-size: 13px;
 	}
 	.job-tags .btn {

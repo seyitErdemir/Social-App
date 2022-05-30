@@ -47,7 +47,7 @@
                                 <td><img width="50px" class="rounded-circle" src="<%= users[i].image %>" alt=""></td>
                                 <td><%=users[i].name%></td>
                                 <td><%=users[i].email%></td>
-                                <td><a href='/admin/users/<%= users[i]._id %>?_method=DELETE' 
+                                <td><a href='/users/<%= users[i]._id %>?_method=DELETE' 
                                     onclick='return confirm("Are you Sure") ' 
                                      class="btn btn-danger rounded-0 text-white"> <span>Delete</span></th></td>
                            

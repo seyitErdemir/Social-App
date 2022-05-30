@@ -2,9 +2,7 @@ const bcrypt = require('bcrypt')
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User')
 const Post = require('../models/Post')
-const Category = require('../models/Category')
-const Course = require('../models/Course')
-
+ 
 exports.createUser = async(req, res) => {
     try { 
         const user = await User.create(req.body) 
@@ -59,15 +57,7 @@ exports.logoutUser = (req, res) => {
     })
 }
 
-exports.preUser = async(req, res) => {
-    const user = await User.findById({ _id: req.session.userID }) 
-    console.log("buradayım"); 
-    user.role = "preuser"
-    user.save()
-     
 
-    res.status(200).redirect('/')
-}
 
 
 exports.getDashboardPage = async(req, res) => {
@@ -91,40 +81,3 @@ exports.getDashboardPage = async(req, res) => {
 }
 
 
-exports.deleteUser = async (req, res) => {
-    try {
-        const user = await User.find()
-        const deleteduser = await User.findById({ _id: req.params.id })
-           
-        for (let i = 0; i < user.length; i++) {
-          
-            user[i].following.pull({ _id: req.params.id })
-            user[i].save()
-        }
-        
-      
-        for (let i = 0; i < deleteduser.followers.length; i++) {
-            const xx = await User.findById({ _id: deleteduser.followers[i]._id }) 
-            xx.followers.pull({ _id: req.params.id })
-            xx.save() 
-        } 
-      
-        
-        console.log("buradayım");
-    
-
-        await Post.deleteMany({user:req.params.id}) 
-        await User.findByIdAndRemove({_id:req.params.id})    
-
-        req.session.destroy(() => {         
-            res.status(200).redirect('/')
-        })
-     
-
-    } catch (error) {
-      res.status(201).json({
-        status: 'fail',
-        error
-      })
-    }
-  }

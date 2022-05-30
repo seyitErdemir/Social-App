@@ -53,8 +53,8 @@
         <div class="row">
 
             <main class="col col-xl-6 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
-                <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
-                    <ul class="nav nav-justified border-bottom osahan-line-tab" id="myTab" role="tablist">
+                <div class="box shadow-sm border rounded bg-white mb-3 devSocial-share-post">
+                    <ul class="nav nav-justified border-bottom devSocial-line-tab" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
                                 <i class="feather-edit"></i>
@@ -105,8 +105,8 @@
                
 
 
-                    <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
-                        <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                    <div class="box shadow-sm border rounded bg-white mb-3 devSocial-post">
+                        <div class="p-3 d-flex align-items-center border-bottom devSocial-post-header">
                             <div class="dropdown-list-image mr-3">
                                 <img class="rounded-circle" src="<%= post[i].user.image %> " alt="">
                                 <div class="status-indicator bg-success"></div>
@@ -118,7 +118,7 @@
                             </div>
                             <span class="ml-auto small"><%= (post[i].createdAt).toISOString().split('T')[0] %></span>
                         </div>
-                        <div class="p-3 border-bottom osahan-post-body">
+                        <div class="p-3 border-bottom devSocial-post-body">
 
                             <% if(  post[i].description  ){ %>
                                 <p class="mb-0"><%= post[i].description %></p>
@@ -132,7 +132,7 @@
                             
                         </p>
                     </div>
-                    <div class="p-3 border-bottom osahan-post-footer">
+                    <div class="p-3 border-bottom devSocial-post-footer">
 <!-- 
                         <%     if(  post[i].userId ==  "true"   ){   %>
                      
@@ -261,7 +261,7 @@
  
             <% if(user.role =="user"){ %>
             <div class="box shadow-sm mb-3 rounded bg-white   text-center overflow-hidden">
-                <img src="img/p13.png" class="img-fluid" alt="Responsive image">
+                <img src="img/pre.png" class="img-fluid" alt="Responsive image">
                 <div class="p-3 border-bottom">
                     <h6 class="font-weight-bold text-gold">Premium</h6>
                     <p class="mb-0 text-muted">Preminum olarak birçok avantajdan faydalan.</p>
@@ -320,7 +320,7 @@
                     <% users.forEach( user => {%>
 
                      
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                        <div class="d-flex align-items-center devSocial-post-header mb-3 people-list">
                             <div class="dropdown-list-image mr-3">
                                 <img class="rounded-circle" src="<%= user.image %>" alt=""> 
                             </div>
@@ -356,19 +356,20 @@
                 <div class="box-body p-3">
                     <div class="gallery-box-main">
                         <div class="gallery-box">
-                            <img class="img-fluid" src="img/p13.png" alt="">
-                            <img class="img-fluid" src="img/p13.png" alt="">
-                            <img class="img-fluid" src="img/p13.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
+
                         </div>
                         <div class="gallery-box">
-                            <img class="img-fluid" src="img/p13.png" alt="">
-                            <img class="img-fluid" src="img/p13.png" alt="">
-                            <img class="img-fluid" src="img/p13.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
                         </div>
                         <div class="gallery-box">
-                            <img class="img-fluid" src="img/p13.png" alt="">
-                            <img class="img-fluid" src="img/p13.png" alt="">
-                            <img class="img-fluid" src="img/p13.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
+                            <img class="img-fluid" src="img/fav.png" alt="">
                         </div>
                     </div>
                 </div>
